@@ -1,4 +1,4 @@
-import NaverWeddingMap from "@/components/NaverWeddingMap";
+import NaverWeddingMap from "@/components/map/NaverWeddingMap";
 import styles from "./page.module.css";
 
 export default function Home() {
