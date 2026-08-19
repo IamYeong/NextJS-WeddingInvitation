@@ -11,3 +11,14 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## Project workflow
 
 - Do not run `git commit` or `git push` unless the user explicitly asks for it.
+
+## Project structure
+
+- Keep route pages under route groups. The home page lives under `app/(home)/`; add related page files such as `page.tsx` and `page.module.css` there instead of placing them directly under `app/`.
+- Keep reusable UI pieces under `components/`.
+- When adding a new component, create a feature directory under `components/` first, then place the component and its colocated files inside it. For example, map-related components belong under `components/map/`.
+- Keep component-specific styles next to the component as CSS Modules, such as `ComponentName.module.css`.
+- Keep page-specific styles next to the page as CSS Modules, such as `app/(home)/page.module.css`.
+- Keep `app/layout.tsx` at the app root as the Root Layout.
+- Keep `app/globals.css` at the app root for global styles only. Do not put page-specific or component-specific styles there.
+- Keep static assets such as `favicon.ico` under `public/` unless a Next.js app metadata file convention is specifically needed.

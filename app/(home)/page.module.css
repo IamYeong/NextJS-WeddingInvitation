@@ -1,0 +1,19 @@
+.page {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.intro {
+  display: grid;
+  min-height: 44vh;
+  place-items: center;
+  padding: 48px 20px;
+  text-align: center;
+}
+
+.intro p {
+  font-size: 24px;
+  font-weight: 700;
+}
