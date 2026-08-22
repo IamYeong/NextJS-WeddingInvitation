@@ -1,4 +1,5 @@
 import { CommentRepositoryImpl } from "./sheet/CommentRepositoryImpl";
+import { createOAuthAuthorizationRepositories } from "./oauth/createOAuthAuthorizationRepositories";
 import { GoogleOAuthUserRepository } from "./oauth/google/GoogleOAuthUserRepository";
 import { GuestRepositoryImpl } from "./oauth/GuestRepositoryImpl";
 import { KakaoOAuthUserRepository } from "./oauth/kakao/KakaoOAuthUserRepository";
@@ -13,6 +14,7 @@ export function createRepositories() {
   const commentRepository = new CommentRepositoryImpl();
 
   return {
+    oauthAuthorizationRepositories: createOAuthAuthorizationRepositories(),
     guestRepository,
     commentRepository,
   };

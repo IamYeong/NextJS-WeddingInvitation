@@ -1,3 +1,4 @@
+import GuestLoginPanel from "@/components/auth/GuestLoginPanel";
 import NaverWeddingMap from "@/components/map/NaverWeddingMap";
 import styles from "./page.module.css";
 
@@ -9,6 +10,7 @@ export default function Home() {
       </section>
 
       <NaverWeddingMap />
+      <GuestLoginPanel />
     </main>
   );
 }

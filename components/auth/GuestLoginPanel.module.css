@@ -1,0 +1,50 @@
+.section {
+  width: 100%;
+  border-top: 1px solid #e5e7eb;
+  background: #ffffff;
+  padding: 24px 16px 32px;
+}
+
+.section h2 {
+  margin: 0 auto 12px;
+  max-width: 720px;
+  color: #111827;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 auto;
+  max-width: 720px;
+}
+
+.actions button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.status {
+  margin: 12px auto 0;
+  max-width: 720px;
+  color: #475569;
+  font-size: 14px;
+}
+
+@media (max-width: 520px) {
+  .actions {
+    grid-template-columns: 1fr;
+  }
+}
