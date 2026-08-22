@@ -4,7 +4,15 @@ export class NaverOAuthAuthorizationRepository extends OAuthAuthorizationReposit
   readonly provider = "naver";
   protected readonly authorizeUrl = "https://nid.naver.com/oauth2.0/authorize";
   protected readonly tokenUrl = "https://nid.naver.com/oauth2.0/token";
-  protected readonly clientIdEnvKey = "NAVER_CLIENT_ID";
-  protected readonly clientSecretEnvKey = "NAVER_CLIENT_SECRET";
-  protected readonly clientSecretRequired = true;
+
+  protected getClientId() {
+    return this.requireEnv(process.env.NAVER_CLIENT_ID, "NAVER_CLIENT_ID");
+  }
+
+  protected getClientSecret() {
+    return this.requireEnv(
+      process.env.NAVER_CLIENT_SECRET,
+      "NAVER_CLIENT_SECRET",
+    );
+  }
 }

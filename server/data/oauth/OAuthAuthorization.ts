@@ -28,9 +28,7 @@ export abstract class OAuthAuthorizationRepositoryBase
   abstract readonly provider: OAuthProvider;
   protected abstract readonly authorizeUrl: string;
   protected abstract readonly tokenUrl: string;
-  protected abstract readonly clientIdEnvKey: string;
-  protected abstract readonly clientSecretEnvKey?: string;
-  protected readonly clientSecretRequired: boolean = false;
+  protected abstract getClientId(): string;
 
   createAuthorizationUrl({
     origin,
@@ -98,27 +96,15 @@ export abstract class OAuthAuthorizationRepositoryBase
     return `${origin}/api/oauth/callback/${this.provider}`;
   }
 
-  protected getClientId() {
-    const clientId = process.env[this.clientIdEnvKey];
-
-    if (!clientId?.trim()) {
-      throw new Error(`${this.clientIdEnvKey} 환경변수가 필요합니다.`);
-    }
-
-    return clientId;
+  protected getClientSecret(): string | undefined {
+    return undefined;
   }
 
-  protected getClientSecret() {
-    if (!this.clientSecretEnvKey) {
-      return undefined;
+  protected requireEnv(value: string | undefined, key: string) {
+    if (!value?.trim()) {
+      throw new Error(`${key} 환경변수가 필요합니다.`);
     }
 
-    const clientSecret = process.env[this.clientSecretEnvKey];
-
-    if (this.clientSecretRequired && !clientSecret?.trim()) {
-      throw new Error(`${this.clientSecretEnvKey} 환경변수가 필요합니다.`);
-    }
-
-    return clientSecret;
+    return value;
   }
 }

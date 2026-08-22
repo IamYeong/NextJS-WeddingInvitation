@@ -23,14 +23,14 @@ export abstract class OAuthUserRepository<
 > extends OAuthRepositoryBase {
   abstract readonly provider: OAuthProvider;
   protected abstract readonly userInfoUrl: string;
-  protected abstract readonly appIdEnvKey: string;
+  protected abstract validateConfig(): void;
 
   async findUserInfo(accessToken: string): Promise<OAuthUserInfo> {
     if (!accessToken.trim()) {
       throw new Error("액세스 토큰이 필요합니다.");
     }
 
-    this.requireConfig();
+    this.validateConfig();
 
     const response = await fetch(this.userInfoUrl, {
       headers: {
@@ -51,9 +51,11 @@ export abstract class OAuthUserRepository<
     response: TUserInfoResponse,
   ): OAuthUserInfo;
 
-  private requireConfig() {
-    if (!process.env[this.appIdEnvKey]?.trim()) {
-      throw new Error(`${this.appIdEnvKey} 환경변수가 필요합니다.`);
+  protected requireEnv(value: string | undefined, key: string) {
+    if (!value?.trim()) {
+      throw new Error(`${key} 환경변수가 필요합니다.`);
     }
+
+    return value;
   }
 }

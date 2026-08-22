@@ -4,9 +4,17 @@ export class GoogleOAuthAuthorizationRepository extends OAuthAuthorizationReposi
   readonly provider = "google";
   protected readonly authorizeUrl = "https://accounts.google.com/o/oauth2/v2/auth";
   protected readonly tokenUrl = "https://oauth2.googleapis.com/token";
-  protected readonly clientIdEnvKey = "GOOGLE_CLIENT_ID";
-  protected readonly clientSecretEnvKey = "GOOGLE_CLIENT_SECRET";
-  protected readonly clientSecretRequired = true;
+
+  protected getClientId() {
+    return this.requireEnv(process.env.GOOGLE_CLIENT_ID, "GOOGLE_CLIENT_ID");
+  }
+
+  protected getClientSecret() {
+    return this.requireEnv(
+      process.env.GOOGLE_CLIENT_SECRET,
+      "GOOGLE_CLIENT_SECRET",
+    );
+  }
 
   protected applyAuthorizationParams(url: URL) {
     url.searchParams.set("scope", "openid profile");

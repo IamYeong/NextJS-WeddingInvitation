@@ -14,7 +14,10 @@ type NaverUserResponse = {
 export class NaverOAuthUserRepository extends OAuthUserRepository<NaverUserResponse> {
   readonly provider = "naver";
   protected readonly userInfoUrl = "https://openapi.naver.com/v1/nid/me";
-  protected readonly appIdEnvKey = "NAVER_CLIENT_ID";
+
+  protected validateConfig() {
+    this.requireEnv(process.env.NAVER_CLIENT_ID, "NAVER_CLIENT_ID");
+  }
 
   protected toOAuthUserInfo(response: NaverUserResponse): OAuthUserInfo {
     const oauthUserId = response.response?.id;

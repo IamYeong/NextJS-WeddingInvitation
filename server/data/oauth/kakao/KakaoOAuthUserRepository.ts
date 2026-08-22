@@ -18,7 +18,10 @@ type KakaoUserResponse = {
 export class KakaoOAuthUserRepository extends OAuthUserRepository<KakaoUserResponse> {
   readonly provider = "kakao";
   protected readonly userInfoUrl = "https://kapi.kakao.com/v2/user/me";
-  protected readonly appIdEnvKey = "KAKAO_APP_ID";
+
+  protected validateConfig() {
+    this.requireEnv(process.env.KAKAO_APP_ID, "KAKAO_APP_ID");
+  }
 
   protected toOAuthUserInfo(response: KakaoUserResponse): OAuthUserInfo {
     return {

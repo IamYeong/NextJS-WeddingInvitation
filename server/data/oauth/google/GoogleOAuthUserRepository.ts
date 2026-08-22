@@ -12,7 +12,10 @@ export class GoogleOAuthUserRepository extends OAuthUserRepository<GoogleUserRes
   readonly provider = "google";
   protected readonly userInfoUrl =
     "https://openidconnect.googleapis.com/v1/userinfo";
-  protected readonly appIdEnvKey = "GOOGLE_CLIENT_ID";
+
+  protected validateConfig() {
+    this.requireEnv(process.env.GOOGLE_CLIENT_ID, "GOOGLE_CLIENT_ID");
+  }
 
   protected toOAuthUserInfo(response: GoogleUserResponse): OAuthUserInfo {
     return {
