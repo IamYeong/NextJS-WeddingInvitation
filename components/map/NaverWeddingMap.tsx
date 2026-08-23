@@ -1,19 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { naverWeddingMapStrings } from "@/content/strings";
 import styles from "./NaverWeddingMap.module.css";
 
-const NAVER_MAP_SCRIPT_ID = "naver-map-script";
-const NAVER_MAP_KEY_ID = "4imwgi7lfb";
-const VENUE_NAME = "송파문정 더 컨벤션";
-const VENUE_ADDRESS = "서울 송파구 송파대로 155";
-const VENUE_LAT = 37.484140411747;
-const VENUE_LNG = 127.1228704328;
-const APP_NAME = "wedding-invitation";
-const TMAP_ANDROID_PACKAGE = "com.skt.tmap.ku";
-const TMAP_ANDROID_STORE_URL =
-  "https://play.google.com/store/apps/details?id=com.skt.tmap.ku";
-const TMAP_IOS_STORE_URL = "https://apps.apple.com/kr/app/id431589174";
+const { venue } = naverWeddingMapStrings;
 
 type NaverMapApi = {
   LatLng: new (lat: number, lng: number) => object;
@@ -50,35 +41,35 @@ function encode(value: string) {
 }
 
 function getNaverNavigationUrl() {
-  const query = `dlat=${VENUE_LAT}&dlng=${VENUE_LNG}&dname=${encode(
-    VENUE_NAME,
-  )}&appname=${encode(APP_NAME)}`;
+  const query = `dlat=${venue.lat}&dlng=${venue.lng}&dname=${encode(
+    venue.name,
+  )}&appname=${encode(naverWeddingMapStrings.appName)}`;
 
   return `nmap://navigation?${query}`;
 }
 
 function getNaverAndroidIntentUrl() {
-  const query = `dlat=${VENUE_LAT}&dlng=${VENUE_LNG}&dname=${encode(
-    VENUE_NAME,
-  )}&appname=${encode(APP_NAME)}`;
+  const query = `dlat=${venue.lat}&dlng=${venue.lng}&dname=${encode(
+    venue.name,
+  )}&appname=${encode(naverWeddingMapStrings.appName)}`;
 
   return `intent://navigation?${query}#Intent;scheme=nmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.nmap;end`;
 }
 
 function getKakaoRouteUrl() {
-  return `https://map.kakao.com/link/to/${encode(VENUE_NAME)},${VENUE_LAT},${VENUE_LNG}`;
+  return `https://map.kakao.com/link/to/${encode(venue.name)},${venue.lat},${venue.lng}`;
 }
 
 function getTmapRouteUrl() {
-  const query = `goalname=${encode(VENUE_NAME)}&goalx=${VENUE_LNG}&goaly=${VENUE_LAT}`;
+  const query = `goalname=${encode(venue.name)}&goalx=${venue.lng}&goaly=${venue.lat}`;
 
   return `tmap://route?${query}`;
 }
 
 function getTmapAndroidIntentUrl() {
-  const query = `goalname=${encode(VENUE_NAME)}&goalx=${VENUE_LNG}&goaly=${VENUE_LAT}`;
+  const query = `goalname=${encode(venue.name)}&goalx=${venue.lng}&goaly=${venue.lat}`;
 
-  return `intent://route?${query}#Intent;scheme=tmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=${TMAP_ANDROID_PACKAGE};end`;
+  return `intent://route?${query}#Intent;scheme=tmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=${naverWeddingMapStrings.stores.tmapAndroidPackage};end`;
 }
 
 function openNaverNavigation() {
@@ -92,12 +83,12 @@ function openNaverNavigation() {
   if (/iphone|ipad|ipod/.test(userAgent)) {
     window.location.href = getNaverNavigationUrl();
     window.setTimeout(() => {
-      window.location.href = "https://apps.apple.com/kr/app/id311867728";
+      window.location.href = naverWeddingMapStrings.stores.naverIos;
     }, 1200);
     return;
   }
 
-  window.open(`https://map.naver.com/p/search/${encode(VENUE_NAME)}`, "_blank");
+  window.open(`https://map.naver.com/p/search/${encode(venue.name)}`, "_blank");
 }
 
 function openTmapNavigation() {
@@ -106,11 +97,13 @@ function openTmapNavigation() {
   const isIos = /iphone|ipad|ipod/.test(userAgent);
 
   if (!isAndroid && !isIos) {
-    window.alert("티맵 길안내는 Android/iOS 티맵 앱에서만 사용할 수 있습니다.");
+    window.alert(naverWeddingMapStrings.alerts.tmapMobileOnly);
     return;
   }
 
-  const storeUrl = isAndroid ? TMAP_ANDROID_STORE_URL : TMAP_IOS_STORE_URL;
+  const storeUrl = isAndroid
+    ? naverWeddingMapStrings.stores.tmapAndroid
+    : naverWeddingMapStrings.stores.tmapIos;
   const cleanupHandlers: Array<() => void> = [];
 
   const fallbackTimer = window.setTimeout(() => {
@@ -118,7 +111,7 @@ function openTmapNavigation() {
 
     if (
       document.visibilityState === "visible" &&
-      window.confirm("티맵 앱이 설치되어 있지 않다면 앱 설치 페이지로 이동할까요?")
+      window.confirm(naverWeddingMapStrings.alerts.tmapInstallConfirm)
     ) {
       window.location.href = storeUrl;
     }
@@ -168,7 +161,7 @@ export default function NaverWeddingMap() {
         return;
       }
 
-      const venuePosition = new maps.LatLng(VENUE_LAT, VENUE_LNG);
+      const venuePosition = new maps.LatLng(venue.lat, venue.lng);
       const map = new maps.Map(mapElementRef.current, {
         center: venuePosition,
         zoom: 17,
@@ -181,10 +174,10 @@ export default function NaverWeddingMap() {
       const marker = new maps.Marker({
         map,
         position: venuePosition,
-        title: VENUE_NAME,
+        title: venue.name,
       });
       const infoWindow = new maps.InfoWindow({
-        content: `<div class="${styles.infoWindow}"><strong>${VENUE_NAME}</strong><span>${VENUE_ADDRESS}</span></div>`,
+        content: `<div class="${styles.infoWindow}"><strong>${venue.name}</strong><span>${venue.address}</span></div>`,
       });
 
       infoWindow.open(map, marker);
@@ -203,7 +196,9 @@ export default function NaverWeddingMap() {
       };
     }
 
-    const existingScript = document.getElementById(NAVER_MAP_SCRIPT_ID);
+    const existingScript = document.getElementById(
+      naverWeddingMapStrings.mapScriptId,
+    );
 
     if (existingScript) {
       existingScript.addEventListener("load", initializeMap);
@@ -216,9 +211,9 @@ export default function NaverWeddingMap() {
     }
 
     const script = document.createElement("script");
-    script.id = NAVER_MAP_SCRIPT_ID;
+    script.id = naverWeddingMapStrings.mapScriptId;
     script.async = true;
-    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NAVER_MAP_KEY_ID}`;
+    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${naverWeddingMapStrings.naverMapKeyId}`;
     script.addEventListener("load", initializeMap);
     script.addEventListener("error", () => setMapStatus("error"));
     document.head.appendChild(script);
@@ -232,9 +227,9 @@ export default function NaverWeddingMap() {
   return (
     <section className={styles.section} aria-labelledby="wedding-map-title">
       <div className={styles.copy}>
-        <p className={styles.eyebrow}>오시는 길</p>
-        <h2 id="wedding-map-title">{VENUE_NAME}</h2>
-        <p>{VENUE_ADDRESS}</p>
+        <p className={styles.eyebrow}>{naverWeddingMapStrings.labels.section}</p>
+        <h2 id="wedding-map-title">{venue.name}</h2>
+        <p>{venue.address}</p>
       </div>
 
       <div className={styles.frame}>
@@ -242,21 +237,24 @@ export default function NaverWeddingMap() {
         {mapStatus !== "ready" && (
           <div className={styles.status} role="status">
             {mapStatus === "loading"
-              ? "지도를 불러오는 중입니다."
-              : "지도 로드에 실패했습니다. 허용 도메인과 ncpKeyId 설정을 확인해주세요."}
+              ? naverWeddingMapStrings.status.loading
+              : naverWeddingMapStrings.status.error}
           </div>
         )}
       </div>
 
-      <div className={styles.actions} aria-label="지도 앱 길안내">
+      <div
+        className={styles.actions}
+        aria-label={naverWeddingMapStrings.labels.actions}
+      >
         <button type="button" onClick={openNaverNavigation}>
-          네이버지도 내비게이션
+          {naverWeddingMapStrings.buttons.naver}
         </button>
         <a href={getKakaoRouteUrl()} target="_blank" rel="noreferrer">
-          카카오맵 길찾기
+          {naverWeddingMapStrings.buttons.kakao}
         </a>
         <button type="button" onClick={openTmapNavigation}>
-          티맵으로 가기
+          {naverWeddingMapStrings.buttons.tmap}
         </button>
       </div>
     </section>
