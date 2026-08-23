@@ -18,7 +18,7 @@ function createState() {
 
 export async function GET(
   request: NextRequest,
-  context: RouteContext<"/api/oauth/start/[provider]">,
+  context: RouteContext<"/api/oauth/login/[provider]">,
 ) {
   const { provider } = await context.params;
 

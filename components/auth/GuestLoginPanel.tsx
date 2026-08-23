@@ -65,7 +65,7 @@ export default function GuestLoginPanel() {
   };
 
   const startOAuthLogin = (provider: "kakao" | "naver" | "google") => {
-    router.push(`/api/oauth/start/${provider}`);
+    router.push(`/api/oauth/login/${provider}`);
   };
 
   return (
