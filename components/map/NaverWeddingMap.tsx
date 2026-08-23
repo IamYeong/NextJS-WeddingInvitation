@@ -10,6 +10,10 @@ const VENUE_ADDRESS = "서울 송파구 송파대로 155";
 const VENUE_LAT = 37.484140411747;
 const VENUE_LNG = 127.1228704328;
 const APP_NAME = "wedding-invitation";
+const TMAP_ANDROID_PACKAGE = "com.skt.tmap.ku";
+const TMAP_ANDROID_STORE_URL =
+  "https://play.google.com/store/apps/details?id=com.skt.tmap.ku";
+const TMAP_IOS_STORE_URL = "https://apps.apple.com/kr/app/id431589174";
 
 type NaverMapApi = {
   LatLng: new (lat: number, lng: number) => object;
@@ -65,6 +69,18 @@ function getKakaoRouteUrl() {
   return `https://map.kakao.com/link/to/${encode(VENUE_NAME)},${VENUE_LAT},${VENUE_LNG}`;
 }
 
+function getTmapRouteUrl() {
+  const query = `goalname=${encode(VENUE_NAME)}&goalx=${VENUE_LNG}&goaly=${VENUE_LAT}`;
+
+  return `tmap://route?${query}`;
+}
+
+function getTmapAndroidIntentUrl() {
+  const query = `goalname=${encode(VENUE_NAME)}&goalx=${VENUE_LNG}&goaly=${VENUE_LAT}`;
+
+  return `intent://route?${query}#Intent;scheme=tmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=${TMAP_ANDROID_PACKAGE};end`;
+}
+
 function openNaverNavigation() {
   const userAgent = navigator.userAgent.toLowerCase();
 
@@ -82,6 +98,52 @@ function openNaverNavigation() {
   }
 
   window.open(`https://map.naver.com/p/search/${encode(VENUE_NAME)}`, "_blank");
+}
+
+function openTmapNavigation() {
+  const userAgent = navigator.userAgent.toLowerCase();
+  const isAndroid = userAgent.includes("android");
+  const isIos = /iphone|ipad|ipod/.test(userAgent);
+
+  if (!isAndroid && !isIos) {
+    window.alert("티맵 길안내는 Android/iOS 티맵 앱에서만 사용할 수 있습니다.");
+    return;
+  }
+
+  const storeUrl = isAndroid ? TMAP_ANDROID_STORE_URL : TMAP_IOS_STORE_URL;
+  const cleanupHandlers: Array<() => void> = [];
+
+  const fallbackTimer = window.setTimeout(() => {
+    cleanupHandlers.forEach((cleanup) => cleanup());
+
+    if (
+      document.visibilityState === "visible" &&
+      window.confirm("티맵 앱이 설치되어 있지 않다면 앱 설치 페이지로 이동할까요?")
+    ) {
+      window.location.href = storeUrl;
+    }
+  }, 1400);
+
+  const cancelFallback = () => {
+    window.clearTimeout(fallbackTimer);
+    cleanupHandlers.forEach((cleanup) => cleanup());
+  };
+  const cancelOnHidden = () => {
+    if (document.visibilityState === "hidden") {
+      cancelFallback();
+    }
+  };
+
+  window.addEventListener("pagehide", cancelFallback, { once: true });
+  document.addEventListener("visibilitychange", cancelOnHidden);
+  cleanupHandlers.push(
+    () => window.removeEventListener("pagehide", cancelFallback),
+    () => document.removeEventListener("visibilitychange", cancelOnHidden),
+  );
+
+  window.location.href = isAndroid
+    ? getTmapAndroidIntentUrl()
+    : getTmapRouteUrl();
 }
 
 export default function NaverWeddingMap() {
@@ -193,6 +255,9 @@ export default function NaverWeddingMap() {
         <a href={getKakaoRouteUrl()} target="_blank" rel="noreferrer">
           카카오맵 길찾기
         </a>
+        <button type="button" onClick={openTmapNavigation}>
+          티맵으로 가기
+        </button>
       </div>
     </section>
   );
