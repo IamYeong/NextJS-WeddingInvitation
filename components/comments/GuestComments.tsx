@@ -10,6 +10,8 @@ const GUEST_LOGIN_CHANGED_EVENT = "guest-login-changed";
 type Guest = {
   id: string;
   nickname: string;
+  provider: "kakao" | "google" | "naver" | "anonymous";
+  oauthUserId?: string;
 };
 
 type CommentItem = {
@@ -59,6 +61,10 @@ export default function GuestComments() {
   >("idle");
 
   const totalPages = Math.max(1, Math.ceil(comments.length / COMMENTS_PER_PAGE));
+  const isAnonymousGuest = guest?.provider === "anonymous";
+  const commentValue = isAnonymousGuest
+    ? guestCommentsStrings.form.anonymousContent
+    : comment;
   const pageComments = useMemo(() => {
     const startIndex = (page - 1) * COMMENTS_PER_PAGE;
 
@@ -134,7 +140,9 @@ export default function GuestComments() {
       return;
     }
 
-    const trimmedComment = comment.trim();
+    const trimmedComment = isAnonymousGuest
+      ? guestCommentsStrings.form.anonymousContent
+      : comment.trim();
 
     if (!trimmedComment) {
       return;
@@ -230,15 +238,19 @@ export default function GuestComments() {
           <span>{guest?.nickname ?? guestCommentsStrings.form.authorFallback}</span>
         </label>
         <textarea
-          value={comment}
+          value={commentValue}
           onChange={(event) => setComment(event.target.value)}
           onFocus={showLoginRequired}
           placeholder={guestCommentsStrings.form.placeholder}
+          disabled={isAnonymousGuest}
           rows={3}
         />
         <button
           type="submit"
-          disabled={formStatus === "submitting" || comment.trim().length === 0}
+          disabled={
+            formStatus === "submitting" ||
+            (!isAnonymousGuest && comment.trim().length === 0)
+          }
         >
           {formStatus === "submitting"
             ? guestCommentsStrings.form.submitting

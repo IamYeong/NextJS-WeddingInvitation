@@ -31,6 +31,7 @@ export const guestCommentsStrings = {
     `${currentPage} / ${totalPages}`,
   form: {
     authorFallback: "로그인 필요",
+    anonymousContent: "축하합니다~",
     placeholder: "축하 메시지를 남겨주세요.",
     loginRequired: "댓글을 작성하려면 로그인이 필요합니다.",
     submit: "등록",

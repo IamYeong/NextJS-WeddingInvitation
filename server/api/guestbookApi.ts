@@ -1,3 +1,4 @@
+import { guestCommentsStrings } from "@/content/strings";
 import { CommentRepository } from "@/server/domain/repository/CommentRepository";
 import {
   GuestLoginRequest,
@@ -35,7 +36,9 @@ export function createGuestbookApi({
         throw new Error("댓글 작성자를 찾을 수 없습니다.");
       }
 
-      const content = request.content?.trim();
+      const content = author.isAnonymous
+        ? guestCommentsStrings.form.anonymousContent
+        : request.content?.trim();
 
       if (!content) {
         throw new Error("댓글 내용이 필요합니다.");

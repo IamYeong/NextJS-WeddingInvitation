@@ -154,6 +154,12 @@
   line-height: 1.5;
 }
 
+.form textarea:disabled {
+  background: #f8fafc;
+  color: #334155;
+  cursor: not-allowed;
+}
+
 .form button {
   min-width: 74px;
   min-height: 48px;

@@ -11,7 +11,7 @@ import {
 } from "@/server/domain/repository/Pagination";
 import { GoogleSheetsClient } from "./GoogleSheetsClient";
 
-const COMMENT_HEADER = ["guestId", "nickname", "content", "createdAt"];
+const COMMENT_HEADER = ["accountId", "nickname", "content", "createdAt"];
 
 export class CommentRepositoryImpl implements CommentRepository {
   constructor(private readonly sheetsClient: GoogleSheetsClient) {}
@@ -27,7 +27,7 @@ export class CommentRepositoryImpl implements CommentRepository {
     await this.ensureHeader();
     await this.sheetsClient.appendValues("A:D", [
       [
-        comment.author.id,
+        this.getProviderAccountId(comment),
         comment.author.nickname,
         comment.content,
         comment.createdAt.toISOString(),
@@ -78,16 +78,16 @@ export class CommentRepositoryImpl implements CommentRepository {
   }
 
   private toComment(row: string[], index: number) {
-    const [guestId, nickname, content, createdAt] = row;
+    const [accountId, nickname, content, createdAt] = row;
 
-    if (!guestId || !nickname || !content || !createdAt) {
+    if (!accountId || !nickname || !content || !createdAt) {
       return null;
     }
 
     return new Comment({
-      id: `comment_${createdAt}_${guestId}_${index}`,
+      id: `comment_${createdAt}_${accountId}_${index}`,
       author: new Guest({
-        id: guestId,
+        id: accountId,
         nickname,
         loginInfo: {
           provider: "anonymous",
@@ -96,6 +96,20 @@ export class CommentRepositoryImpl implements CommentRepository {
       createdAt: new Date(createdAt),
       content,
     });
+  }
+
+  private getProviderAccountId(comment: Comment) {
+    if (comment.author.isAnonymous) {
+      return "anonymous";
+    }
+
+    const providerAccountId = comment.author.loginInfo.oauthUserId;
+
+    if (!providerAccountId) {
+      throw new Error("OAuth provider 계정 ID가 필요합니다.");
+    }
+
+    return providerAccountId;
   }
 
   private createCommentId() {
