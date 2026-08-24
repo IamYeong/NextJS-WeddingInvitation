@@ -1,6 +1,4 @@
-import {
-  ANONYMOUS_COMMENT_CONTENT,
-} from "@/server/domain/entity/Comment";
+import { guestCommentsStrings } from "@/content/strings";
 import { CommentRepository } from "@/server/domain/repository/CommentRepository";
 import {
   GuestLoginRequest,
@@ -39,7 +37,7 @@ export function createGuestbookApi({
       }
 
       const content = author.isAnonymous
-        ? ANONYMOUS_COMMENT_CONTENT
+        ? guestCommentsStrings.form.anonymousContent
         : request.content?.trim();
 
       if (!content) {
@@ -55,6 +53,10 @@ export function createGuestbookApi({
 
     async listComments(request: PaginationRequest) {
       return commentRepository.list(request);
+    },
+
+    async listAllComments() {
+      return commentRepository.listAll();
     },
   };
 }
