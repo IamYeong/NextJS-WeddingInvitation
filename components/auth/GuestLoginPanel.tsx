@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { guestLoginPanelStrings } from "@/content/strings";
 import styles from "./GuestLoginPanel.module.css";
 
+const GUEST_LOGIN_CHANGED_EVENT = "guest-login-changed";
+
 type Guest = {
   id: string;
   nickname: string;
@@ -60,6 +62,7 @@ export default function GuestLoginPanel() {
 
       setGuest(guest);
       setStatus("idle");
+      window.dispatchEvent(new Event(GUEST_LOGIN_CHANGED_EVENT));
     } catch {
       setStatus("error");
     }

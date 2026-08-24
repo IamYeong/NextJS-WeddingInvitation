@@ -1,6 +1,3 @@
-import {
-  ANONYMOUS_COMMENT_CONTENT,
-} from "@/server/domain/entity/Comment";
 import { CommentRepository } from "@/server/domain/repository/CommentRepository";
 import {
   GuestLoginRequest,
@@ -38,9 +35,7 @@ export function createGuestbookApi({
         throw new Error("댓글 작성자를 찾을 수 없습니다.");
       }
 
-      const content = author.isAnonymous
-        ? ANONYMOUS_COMMENT_CONTENT
-        : request.content?.trim();
+      const content = request.content?.trim();
 
       if (!content) {
         throw new Error("댓글 내용이 필요합니다.");
@@ -55,6 +50,10 @@ export function createGuestbookApi({
 
     async listComments(request: PaginationRequest) {
       return commentRepository.list(request);
+    },
+
+    async listAllComments() {
+      return commentRepository.listAll();
     },
   };
 }

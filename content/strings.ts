@@ -22,6 +22,29 @@ export const guestLoginPanelStrings = {
   },
 } as const;
 
+export const guestCommentsStrings = {
+  title: "댓글",
+  empty: "아직 작성된 댓글이 없습니다.",
+  loading: "댓글을 불러오는 중입니다.",
+  loadError: "댓글을 불러오지 못했습니다.",
+  pageStatus: (currentPage: number, totalPages: number) =>
+    `${currentPage} / ${totalPages}`,
+  form: {
+    authorFallback: "로그인 필요",
+    placeholder: "축하 메시지를 남겨주세요.",
+    loginRequired: "댓글을 작성하려면 로그인이 필요합니다.",
+    submit: "등록",
+    submitting: "등록 중",
+    submitError: "댓글 등록에 실패했습니다.",
+  },
+  pagination: {
+    previous: "이전 댓글 페이지",
+    previousSymbol: "<",
+    next: "다음 댓글 페이지",
+    nextSymbol: ">",
+  },
+} as const;
+
 export const naverWeddingMapStrings = {
   mapScriptId: "naver-map-script",
   naverMapKeyId: "4imwgi7lfb",

@@ -11,4 +11,5 @@ export type SaveCommentRequest = {
 export interface CommentRepository {
   save(request: SaveCommentRequest): Promise<Comment>;
   list(request: PaginationRequest): Promise<PageResult<Comment>>;
+  listAll(): Promise<Comment[]>;
 }
