@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import EnvelopeDemo from "@/components/envelope/EnvelopeDemo";
 import GuestLoginPanel from "@/components/auth/GuestLoginPanel";
 import GuestComments from "@/components/comments/GuestComments";
 import HomeIntro from "@/components/home/HomeIntro";
@@ -12,6 +13,12 @@ type ComponentTest = {
 };
 
 export const componentTests: ComponentTest[] = [
+  {
+    slug: "envelope",
+    name: "열리는 청첩장 봉투",
+    description: "봉투를 열고 직사각형 초대장의 결혼 개요를 편집합니다.",
+    component: EnvelopeDemo,
+  },
   {
     slug: "home-intro",
     name: "초대 문구",
