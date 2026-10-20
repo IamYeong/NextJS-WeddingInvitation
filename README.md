@@ -20,6 +20,13 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Component Tests
+
+- Open `/test` to see the component test list.
+- Select an item to view only that component at `/test/[slug]`.
+- Add an entry to `components/component-tests/registry.ts` to register a new component. The list and preview route use the same registry.
+- Previews use the existing APIs and login session. Posting comments or logging in has the same effect as on the home page.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
