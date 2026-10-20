@@ -2,6 +2,7 @@ import type { ComponentType } from "react";
 import GuestLoginPanel from "@/components/auth/GuestLoginPanel";
 import GuestComments from "@/components/comments/GuestComments";
 import HomeIntro from "@/components/home/HomeIntro";
+import IntroFilmPreview from "@/components/intro-film/IntroFilmPreview";
 import NaverWeddingMap from "@/components/map/NaverWeddingMap";
 
 type ComponentTest = {
@@ -12,6 +13,12 @@ type ComponentTest = {
 };
 
 export const componentTests: ComponentTest[] = [
+  {
+    slug: "intro-film",
+    name: "인트로 필름 사진",
+    description: "사진을 선택해 집게와 흑백 인화 프레임을 확인합니다.",
+    component: IntroFilmPreview,
+  },
   {
     slug: "home-intro",
     name: "초대 문구",
