@@ -26,6 +26,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 - Select an item to view only that component at `/test/[slug]`.
 - Add an entry to `components/component-tests/registry.ts` to register a new component. The list and preview route use the same registry.
 - Previews use the existing APIs and login session. Posting comments or logging in has the same effect as on the home page.
+- `/test/guestbook` previews the stacked-card guestbook. Writing requires social login; selecting a preset card posts its fixed message with a generated anonymous nickname. Messages are shown five per page.
 
 ## Learn More
 
