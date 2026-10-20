@@ -45,6 +45,7 @@ function setGuestCookies({
     maxAge: 60 * 60 * 24 * 30,
   });
   response.cookies.delete("oauth_state");
+  response.cookies.delete("oauth_return_to");
 }
 
 export async function GET(
@@ -56,7 +57,21 @@ export async function GET(
   const state = request.nextUrl.searchParams.get("state");
   const error = request.nextUrl.searchParams.get("error");
   const storedState = request.cookies.get("oauth_state")?.value;
-  const redirectUrl = new URL("/", request.nextUrl.origin);
+  const returnTo = request.cookies.get("oauth_return_to")?.value;
+  const redirectUrl = new URL(
+    returnTo?.startsWith("/") && !returnTo.startsWith("//") && !returnTo.includes("\\")
+      ? returnTo
+      : "/",
+    request.nextUrl.origin,
+  );
+
+  function loginFailed(reason: string) {
+    redirectUrl.searchParams.set("login", reason);
+    const response = NextResponse.redirect(redirectUrl);
+    response.cookies.delete("oauth_state");
+    response.cookies.delete("oauth_return_to");
+    return response;
+  }
 
   if (!isOAuthProvider(provider)) {
     return NextResponse.json(
@@ -66,38 +81,42 @@ export async function GET(
   }
 
   if (error) {
-    redirectUrl.searchParams.set("login", "cancelled");
-    return NextResponse.redirect(redirectUrl);
+    return loginFailed("cancelled");
   }
 
   if (!code || !state || state !== storedState) {
-    redirectUrl.searchParams.set("login", "failed");
-    return NextResponse.redirect(redirectUrl);
+    return loginFailed("failed");
   }
 
   const {
     oauthAuthorizationRepositories,
     guestRepository,
   } = getRepositories();
-  const token = await oauthAuthorizationRepositories[
-    provider
-  ].requestAccessToken({
-    origin: request.nextUrl.origin,
-    code,
-  });
-  const guest = await guestRepository.login({
-    provider,
-    accessToken: token.access_token,
-  });
-  const response = NextResponse.redirect(redirectUrl);
 
-  setGuestCookies({
-    request,
-    response,
-    provider,
-    accessToken: token.access_token,
-    guestId: guest.id,
-  });
+  try {
+    const token = await oauthAuthorizationRepositories[
+      provider
+    ].requestAccessToken({
+      origin: request.nextUrl.origin,
+      code,
+    });
+    const guest = await guestRepository.login({
+      provider,
+      accessToken: token.access_token,
+    });
+    if (returnTo) redirectUrl.searchParams.set("login", "success");
+    const response = NextResponse.redirect(redirectUrl);
 
-  return response;
+    setGuestCookies({
+      request,
+      response,
+      provider,
+      accessToken: token.access_token,
+      guestId: guest.id,
+    });
+
+    return response;
+  } catch {
+    return loginFailed("failed");
+  }
 }

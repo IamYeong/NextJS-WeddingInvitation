@@ -1,0 +1,16 @@
+.preview {
+  width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
+}
+
+.control {
+  display: grid;
+  gap: 12px;
+  padding: 24px;
+  font-size: 14px;
+}
+
+.control input { max-width: 100%; }
+.control span { color: #666; font-size: 12px; }
+.empty { padding: 48px 24px; background: #eee7d7; line-height: 1.8; }

@@ -47,5 +47,18 @@ export async function GET(
     maxAge: 60 * 10,
   });
 
+  const returnTo = request.nextUrl.searchParams.get("returnTo");
+  if (returnTo?.startsWith("/") && !returnTo.startsWith("//") && !returnTo.includes("\\")) {
+    response.cookies.set("oauth_return_to", returnTo, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: request.nextUrl.protocol === "https:",
+      path: "/",
+      maxAge: 60 * 10,
+    });
+  } else {
+    response.cookies.delete("oauth_return_to");
+  }
+
   return response;
 }

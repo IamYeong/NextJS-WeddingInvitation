@@ -1,0 +1,15 @@
+.page { min-height: 100svh; padding: 60px 24px; background: #f5f3ec; color: #44443c; }
+.header { text-align: center; margin-bottom: 30px; }
+.header > span { font-size: 9px; letter-spacing: .22em; color: #8b887a; }
+.header h1 { font-family: Georgia, serif; font-size: 26px; font-weight: 400; margin: 16px 0 12px; }
+.header p { font-size: 12px; color: #8b887a; }
+.editor { display: grid; gap: 12px; width: min(100%, 440px); margin: 20px auto 0; padding-top: 22px; border-top: 1px solid #dcd8cc; font-size: 12px; }
+.editor label { font-weight: 600; }
+.editor input { max-width: 100%; }
+.editor p { color: #777469; line-height: 1.7; }
+.editor button { justify-self: start; color: #575448; text-decoration: underline; cursor: pointer; }
+/* Crop the four original portraits with CSS; retain the source asset untouched. */
+.samples [data-photo-index] img { position: absolute; max-width: none; width: 406.78%; height: 479.4%; object-fit: fill; left: -102.82%; top: -159.18%; }
+.samples [data-photo-index="1"] img { left: -203.95%; }
+.samples [data-photo-index="2"] img { top: -260.3%; }
+.samples [data-photo-index="3"] img { left: -203.95%; top: -260.3%; }
