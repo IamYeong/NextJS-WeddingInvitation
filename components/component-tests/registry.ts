@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import AnalogTVTest from "@/components/analog-tv/AnalogTVTest";
 import GuestLoginPanel from "@/components/auth/GuestLoginPanel";
 import GuestComments from "@/components/comments/GuestComments";
 import HomeIntro from "@/components/home/HomeIntro";
@@ -12,6 +13,12 @@ type ComponentTest = {
 };
 
 export const componentTests: ComponentTest[] = [
+  {
+    slug: "analog-tv",
+    name: "아날로그 TV",
+    description: "Figma TV에 사진·영상을 넣고 지직거림 효과를 확인합니다.",
+    component: AnalogTVTest,
+  },
   {
     slug: "home-intro",
     name: "초대 문구",
