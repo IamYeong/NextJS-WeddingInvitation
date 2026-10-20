@@ -3,6 +3,7 @@ import GuestLoginPanel from "@/components/auth/GuestLoginPanel";
 import GuestComments from "@/components/comments/GuestComments";
 import HomeIntro from "@/components/home/HomeIntro";
 import NaverWeddingMap from "@/components/map/NaverWeddingMap";
+import PhotoPrinterDemo from "@/components/photo-printer/PhotoPrinterDemo";
 
 type ComponentTest = {
   slug: string;
@@ -12,6 +13,12 @@ type ComponentTest = {
 };
 
 export const componentTests: ComponentTest[] = [
+  {
+    slug: "photo-printer",
+    name: "네컷 사진 인화기",
+    description: "사진 네 장을 교체하고 출구에서 인화되는 애니메이션을 확인합니다.",
+    component: PhotoPrinterDemo,
+  },
   {
     slug: "home-intro",
     name: "초대 문구",
