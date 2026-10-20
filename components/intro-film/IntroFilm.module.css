@@ -1,0 +1,37 @@
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 520px;
+  margin: 0;
+  padding: 84px 32px 64px;
+  background: radial-gradient(ellipse at 35% 40%, #f1ebdc, #eae3d2);
+}
+
+.composition {
+  position: relative;
+  width: 81%;
+  max-width: 264px;
+  transform: rotate(0.4deg);
+}
+
+.clip {
+  position: absolute;
+  top: -28px;
+  right: 17%;
+  transform: rotate(2deg);
+}
+
+.caption {
+  width: 100%;
+  max-width: 292px;
+  margin-top: 30px;
+  color: #365982;
+  font-family: cursive;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}

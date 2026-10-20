@@ -1,0 +1,14 @@
+.tv { position: relative; width: 100%; aspect-ratio: 1124 / 1399; isolation: isolate; }
+.frame { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; clip-path: polygon(19% 6.7%, 82% 6.7%, 83.3% 8%, 83.3% 63.4%, 82% 64.5%, 53.4% 64.5%, 53.4% 89.8%, 81% 90.7%, 82% 92.4%, 53% 95%, 51% 98.8%, 47% 98.8%, 47% 95%, 21% 92%, 21% 90.5%, 47.3% 89.8%, 47.3% 64.5%, 19% 64.5%, 17.8% 63.3%, 17.8% 8%); }
+.screen { position: absolute; left: 23%; top: 11.3%; width: 55%; height: 34.6%; overflow: hidden; border-radius: 14% / 12%; background: #161c1c; }
+.media, .testCard { width: 100%; height: 100%; object-fit: cover; display: block; }
+.testCard { display: grid; place-items: center; background: linear-gradient(90deg, #d9d3b5 14.28%, #b6ae64 14.28% 28.56%, #7ca6a1 28.56% 42.84%, #789578 42.84% 57.12%, #b18a97 57.12% 71.4%, #a56e63 71.4% 85.68%, #666e91 85.68%); }
+.testCard span { color: #fff; background: #192626d9; padding: 10px 14px; text-align: center; font-size: clamp(8px, 2.3vw, 14px); line-height: 1.8; letter-spacing: .12em; }
+.texture, .glass { position: absolute; inset: 0; pointer-events: none; }
+.glass { box-shadow: inset 0 0 15px 6px #0008; background: linear-gradient(125deg, #ffffff25, transparent 38% 70%, #b3d8d318); }
+.effects .media { filter: saturate(.75) contrast(1.08); }
+.effects .texture { opacity: .19; background: repeating-linear-gradient(0deg, #0008 0 1px, transparent 1px 3px), repeating-conic-gradient(#fff5 0% 25%, #0004 0% 50%) 0 0 / 3px 5px; animation: static .18s steps(3) infinite; }
+.effects .glass::after { content: ""; position: absolute; inset: -100% 0; background: linear-gradient(transparent 45%, #fff2 49%, transparent 53%); animation: tracking 7s linear infinite; }
+@keyframes static { 0% { background-position: 0 0; } 50% { background-position: 2px 3px; opacity: .12; } 100% { background-position: -2px -1px; } }
+@keyframes tracking { from { transform: translateY(-30%); } to { transform: translateY(30%); } }
+@media (prefers-reduced-motion: reduce) { .effects .texture, .effects .glass::after { animation: none; } }

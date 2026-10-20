@@ -1,0 +1,17 @@
+.page { min-height: 100svh; background: #f6f4ee; color: #354b3c; padding: 32px 20px 64px; }
+.header { text-align: center; max-width: 1040px; margin: auto; }
+.header a { display: block; text-align: left; color: #727e6e; text-decoration: none; font-size: 12px; }
+.header p { font: 10px Georgia,serif; letter-spacing: .25em; margin-top: 40px; }
+.header h1 { font: 400 clamp(23px,5vw,32px) 'Batang',Georgia,serif; margin: 16px 0; }
+.header span { font-size: 12px; color: #818675; }
+.layout { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: center; gap: 64px; max-width: 1000px; margin: 24px auto 0; }
+.editor { padding: 32px; border: 1px solid #dbded2; background: #faf9f4; }
+.kicker { font: 9px Georgia,serif; letter-spacing: .2em; color: #818d75; }
+.editor h2 { font: 400 22px 'Batang',Georgia,serif; margin: 12px 0; }
+.editor p { font-size: 12px; color: #7d8475; margin-bottom: 28px; }
+.editor label { display: block; font-size: 11px; margin-top: 18px; color: #697460; }
+.editor input { display: block; width: 100%; box-sizing: border-box; padding: 10px 0; border: 0; border-bottom: 1px solid #d0d5c7; border-radius: 0; background: transparent; color: #344b3b; font-size: 14px; }
+.editor input:focus-visible { outline: 2px solid #788d6b; outline-offset: 3px; }
+.editor button { padding: 0; margin: 24px 0 16px; background: transparent; border: 0; border-bottom: 1px solid #8c987e; font-size: 12px; color: #56674c; cursor: pointer; }
+.editor small { display: block; color: #8a8e80; font-size: 10px; line-height: 1.7; }
+@media(max-width: 720px) { .layout { grid-template-columns: minmax(0,1fr); gap: 36px; max-width: 510px; } .editor { padding: 24px; } }
