@@ -1,0 +1,328 @@
+@font-face {
+  font-family: "Guestbook Garamond";
+  src: url("/guestbook/eb-garamond.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Guestbook DM Sans";
+  src: url("/guestbook/dm-sans.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+.guestbook {
+  min-height: 100vh;
+  overflow: hidden;
+  background: #faf8f5;
+  color: #2c2416;
+  font-family: "Guestbook DM Sans", Arial, "Apple SD Gothic Neo", sans-serif;
+}
+
+.content {
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 48px 20px 56px;
+}
+
+.header {
+  position: relative;
+  padding: 32px 0 28px;
+  text-align: center;
+}
+
+.mode {
+  position: absolute;
+  top: 0;
+  right: 4px;
+  border-radius: 100px;
+  padding: 5px 14px;
+  background: #d8b78a;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.header h1 {
+  color: #1a1a1a;
+  font-family: Arial, sans-serif;
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 44px;
+  letter-spacing: -2.2px;
+}
+
+.header > p {
+  margin-top: 10px;
+  color: #8a8a8a;
+  font-size: 13px;
+  letter-spacing: 0.585px;
+}
+
+.deck {
+  position: relative;
+  max-width: 360px;
+  min-height: 420px;
+  margin: 0 auto;
+  isolation: isolate;
+  perspective: 1000px;
+}
+
+.backCard,
+.middleCard {
+  position: absolute;
+  inset: 0 0 30px;
+  border-radius: 28px;
+  background: #fffefb;
+  box-shadow: 0 4px 24px #2c241612;
+  pointer-events: none;
+}
+
+.backCard { z-index: 1; transform: translateY(12px) rotate(2.8deg); }
+.middleCard { z-index: 2; transform: translateY(6px) rotate(-3.5deg); }
+
+.cover,
+.writeCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 390px;
+  border: 0.5px solid #eae7e2;
+  border-radius: 28px;
+  padding: 28px;
+  background: #fffefb;
+  box-shadow: 0 8px 48px #2c24161f;
+}
+
+.cover {
+  z-index: 4;
+  justify-content: space-between;
+  gap: 28px;
+  border-radius: 12px;
+  background: #fff;
+  text-align: center;
+}
+
+.coverCopy h2 {
+  color: #1a1a1a;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: -0.55px;
+  word-break: keep-all;
+}
+
+.coverCopy p {
+  margin-top: 12px;
+  color: #8a8a8a;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.coverActions { display: grid; gap: 12px; }
+
+.guestbook button,
+.guestbook select { cursor: pointer; }
+.guestbook button:disabled,
+.guestbook select:disabled { cursor: default; }
+.guestbook button:focus-visible,
+.guestbook select:focus-visible,
+.guestbook textarea:focus-visible,
+.carousel:focus-visible { outline: 2px solid #b8956a; outline-offset: 5px; }
+
+.primary,
+.secondary {
+  width: 100%;
+  border: 0;
+  border-radius: 16px;
+  padding: 15px 12px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 22.5px;
+}
+
+.primary { background: #2c2416; color: #faf8f5; }
+.cover .primary { background: #000; color: #fff; }
+.secondary { background: #ddd9d9; color: #000; }
+.primary:disabled { opacity: 0.45; }
+
+.coverBehind {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 0;
+  pointer-events: none;
+  transform: translate(0, 14px) scale(0.96) rotate(3deg);
+  opacity: 0.92;
+  box-shadow: 0 3px 14px #2c241612;
+}
+
+.leaving {
+  will-change: transform, opacity;
+  animation:
+    coverToBack 1100ms both,
+    coverLayer 1100ms steps(1, end) both;
+}
+
+.comingForward {
+  will-change: transform, opacity;
+  animation:
+    coverToBack 1100ms reverse both,
+    coverLayer 1100ms steps(1, end) reverse both;
+}
+
+.returning .backCard,
+.returning .middleCard { opacity: 1; }
+
+.returning .carousel {
+  overflow: hidden;
+  scroll-snap-type: none;
+  pointer-events: none;
+}
+
+.returning .choiceCard {
+  animation: gatherCards 550ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.returning .selectionHeader,
+.returning .anonymousHint,
+.returning .coverAtBack {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+@keyframes gatherCards {
+  to {
+    transform: translate(var(--gather-x), var(--gather-y)) scale(0.96);
+    rotate: 0deg;
+  }
+}
+
+@keyframes coverLayer {
+  0% { z-index: 4; }
+  50%, 100% { z-index: 0; }
+}
+
+@keyframes coverToBack {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0);
+    opacity: 1;
+    box-shadow: 0 8px 48px #2c24161f;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  44%, 50% {
+    transform: translate(16%, -112%) scale(0.98) rotate(-8deg);
+    opacity: 1;
+    box-shadow: 0 24px 56px #2c24162b;
+    animation-timing-function: cubic-bezier(0.32, 0, 0.2, 1);
+  }
+  100% {
+    transform: translate(0, 14px) scale(0.96) rotate(3deg);
+    opacity: 0.92;
+    box-shadow: 0 3px 14px #2c241612;
+  }
+}
+
+.writeCard { z-index: 3; gap: 20px; animation: reveal 450ms ease both; }
+.cardHeader,
+.selectionHeader { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cardHeader h2 { font-family: "Guestbook Garamond", Georgia, serif; font-size: 21.6px; line-height: 32.4px; }
+.cardHeader button,
+.selectionHeader button { color: #9a8e80; font-size: 11px; white-space: nowrap; }
+.cardHeader button:disabled { opacity: 0.4; }
+.overline { color: #b8956a; font-size: 10px; line-height: 15px; letter-spacing: 2.2px; text-transform: uppercase; }
+.messageField { display: flex; flex: 1; flex-direction: column; gap: 12px; }
+.messageField textarea {
+  min-height: 145px;
+  width: 100%;
+  resize: vertical;
+  border: 0;
+  border-bottom: 1px solid #b4a58c73;
+  border-radius: 0;
+  padding: 8px 0;
+  background: transparent;
+  font-size: 16px;
+  line-height: 26px;
+}
+.messageField textarea::placeholder { color: #9a8e80; }
+.signature { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; color: #9a8e80; font-size: 12px; }
+.signature strong { max-width: 150px; overflow-wrap: anywhere; color: #2c2416; font-weight: 500; }
+.signature select { max-width: 82px; border: 0; border-bottom: 1px solid #b4a58c73; padding: 4px; background: transparent; font-size: 11px; }
+.loginPrompt { display: flex; flex-direction: column; align-items: center; gap: 16px; padding-top: 10px; text-align: center; }
+.rule { display: block; width: 36px; height: 1px; background: #b8956a; }
+.loginPrompt h3 { font-size: 18px; font-weight: 600; }
+.loginPrompt p { color: #9a8e80; font-size: 13px; line-height: 1.7; word-break: keep-all; }
+.loginActions { display: grid; gap: 8px; width: 100%; }
+.loginActions button { border-radius: 12px; padding: 12px; font-size: 13px; font-weight: 600; }
+.loginActions button:disabled { opacity: 0.45; }
+.kakao { background: #fee500; color: #191919; }
+.naver { background: #03c75a; color: #fff; }
+.google { border: 1px solid #eae7e2; background: #fff; color: #2c2416; }
+.textButton { padding: 8px 0; color: #9a8e80; font-size: 12px; text-decoration: underline; text-underline-offset: 4px; }
+
+.expanded .backCard,
+.expanded .middleCard { opacity: 0; transition: opacity 400ms; }
+.selection { position: relative; z-index: 3; padding-top: 4px; }
+.selectionHeader { padding: 0 4px; }
+.selectionHeader p { color: #9a8e80; font-size: 12px; }
+.carousel {
+  display: flex;
+  gap: 24px;
+  margin: 0 calc(-1 * max(20px, (100vw - 360px) / 2));
+  padding: 32px max(28px, calc((100vw - 312px) / 2)) 55px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: max(28px, calc((100vw - 312px) / 2));
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.carousel::-webkit-scrollbar { display: none; }
+.choiceCard,
+.coverAtBack {
+  position: relative;
+  display: flex;
+  flex: 0 0 min(300px, calc(100vw - 80px));
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  min-height: 350px;
+  border: 1px solid #eae7e2;
+  border-radius: 28px;
+  padding: 28px;
+  background: #fffefb;
+  box-shadow: 0 8px 24px #2c24161f;
+  scroll-snap-align: center;
+  text-align: center;
+  animation: reveal 600ms ease both;
+}
+.tilt0 { rotate: -3deg; }
+.tilt1 { rotate: 2.5deg; }
+.tilt2 { rotate: -2deg; }
+.choiceCard strong { font-size: 19px; font-weight: 600; word-break: keep-all; }
+.choiceMessage { color: #9a8e80; font-size: 15px; line-height: 1.9; word-break: keep-all; }
+.choiceFooter { margin-top: auto; color: #b8956a; font-size: 12px; }
+.choiceCard:disabled { cursor: wait; }
+.coverAtBack { flex-basis: 220px; rotate: 3deg; color: #b8956a; }
+.coverAtBack span { font-family: "Guestbook Garamond", Georgia, serif; font-size: 30px; }
+.anonymousHint { margin-top: -20px; color: #9a8e80; font-size: 12px; text-align: center; }
+.swipeHint { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 12px 0 0; color: #c0bab4; font-size: 11px; }
+.swipeHint img { flex-shrink: 0; width: 15px; height: 14px; }
+.notice { min-height: 36px; padding-top: 12px; color: #8d714d; font-size: 12px; text-align: center; }
+.messages { display: grid; gap: 16px; max-width: 360px; margin: 16px auto 0; }
+.messages > .overline { padding: 0 4px 2px; letter-spacing: 2.8px; }
+.messageCard { border-radius: 24px; padding: 28px; background: #fffefb; box-shadow: 0 4px 22px #2c241612; animation: reveal 400ms ease both; }
+.messageCard > p { color: #2c2416; font-family: "Guestbook Garamond", Georgia, "Batang", serif; font-size: 19.2px; font-weight: 400; line-height: 31.2px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.messageSignature { display: flex; align-items: center; gap: 12px; padding-top: 20px; color: #b8956a; font-size: 10px; line-height: 15px; letter-spacing: 2.2px; text-transform: uppercase; overflow-wrap: anywhere; }
+.messageSignature span { flex: 1 0 20px; height: 1px; background: #b4a58c4d; }
+.empty { border: 1px solid #eae7e2; border-radius: 24px; padding: 32px 20px; color: #9a8e80; font-size: 13px; line-height: 1.7; text-align: center; }
+.pagination { display: flex; align-items: center; justify-content: center; gap: 28px; padding-top: 12px; color: #9a8e80; font-size: 12px; }
+.pagination button { width: 36px; height: 36px; border: 1px solid #eae7e2; border-radius: 50%; }
+.pagination button:disabled { opacity: 0.3; }
+.footer { padding-top: 56px; color: #c5b9a8; font-size: 10px; line-height: 15px; letter-spacing: 3.5px; text-align: center; }
+.flying { pointer-events: none; animation: sendCard 650ms cubic-bezier(0.55, 0, 0.8, 0.5) forwards; }
+@keyframes sendCard { to { transform: translateY(350px) rotate(12deg) scale(0.7); opacity: 0; } }
+@keyframes reveal { from { opacity: 0; translate: 0 12px; } to { opacity: 1; translate: 0 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .guestbook *, .guestbook *::before, .guestbook *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; scroll-behavior: auto !important; }
+}
