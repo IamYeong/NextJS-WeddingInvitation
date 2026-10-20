@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import NotebookDemo from "@/components/notebook/NotebookDemo";
 import GuestLoginPanel from "@/components/auth/GuestLoginPanel";
 import GuestComments from "@/components/comments/GuestComments";
 import HomeIntro from "@/components/home/HomeIntro";
@@ -12,6 +13,12 @@ type ComponentTest = {
 };
 
 export const componentTests: ComponentTest[] = [
+  {
+    slug: "notebook",
+    name: "세로로 넘기는 노트",
+    description: "스크롤과 터치로 넘기는 10페이지 노트입니다.",
+    component: NotebookDemo,
+  },
   {
     slug: "home-intro",
     name: "초대 문구",
