@@ -1,7 +1,3 @@
-export const homeIntroStrings = {
-  intro: "고라니~~~",
-} as const;
-
 export const naverWeddingMapStrings = {
   mapScriptId: "naver-map-script",
   naverMapKeyId: "4imwgi7lfb",

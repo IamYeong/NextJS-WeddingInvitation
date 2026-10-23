@@ -5,7 +5,6 @@ import IntroFilmPreview from "@/components/intro-film/IntroFilmPreview";
 import PhotoPrinterDemo from "@/components/photo-printer/PhotoPrinterDemo";
 import Guestbook from "@/components/guestbook/Guestbook";
 import type { ComponentType } from "react";
-import HomeIntro from "@/components/home/HomeIntro";
 import NaverWeddingMap from "@/components/map/NaverWeddingMap";
 
 type ComponentTest = {
@@ -51,12 +50,6 @@ export const componentTests: ComponentTest[] = [
     name: "방명록",
     description: "축하 카드 선택, 소셜 로그인 후 작성, 방명록 목록을 확인합니다.",
     component: Guestbook,
-  },
-  {
-    slug: "home-intro",
-    name: "초대 문구",
-    description: "청첩장의 첫 인사말을 확인합니다.",
-    component: HomeIntro,
   },
   {
     slug: "wedding-map",
