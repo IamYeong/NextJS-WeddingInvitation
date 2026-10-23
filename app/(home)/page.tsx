@@ -1,4 +1,3 @@
-import GuestLoginPanel from "@/components/auth/GuestLoginPanel";
 import GuestComments from "@/components/comments/GuestComments";
 import HomeIntro from "@/components/home/HomeIntro";
 import NaverWeddingMap from "@/components/map/NaverWeddingMap";
@@ -9,7 +8,6 @@ export default function Home() {
     <main className={styles.page}>
       <HomeIntro />
       <NaverWeddingMap />
-      <GuestLoginPanel />
       <GuestComments />
     </main>
   );

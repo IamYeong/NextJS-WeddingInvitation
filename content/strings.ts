@@ -2,26 +2,6 @@ export const homeIntroStrings = {
   intro: "고라니~~~",
 } as const;
 
-export const guestLoginPanelStrings = {
-  title: "방명록 로그인",
-  errors: {
-    fetchCurrentGuest: "로그인 정보를 확인하지 못했습니다.",
-    anonymousLogin: "비회원 로그인에 실패했습니다.",
-  },
-  buttons: {
-    kakao: "카카오 로그인",
-    naver: "네이버 로그인",
-    google: "구글 로그인",
-    anonymous: "비회원 로그인",
-  },
-  status: {
-    loading: "로그인 정보를 확인하는 중입니다.",
-    error: "로그인 정보를 확인하지 못했습니다.",
-    idle: "아직 로그인하지 않았습니다.",
-    loggedIn: (nickname: string) => `${nickname} 님으로 로그인되었습니다.`,
-  },
-} as const;
-
 export const guestCommentsStrings = {
   title: "댓글",
   empty: "아직 작성된 댓글이 없습니다.",
