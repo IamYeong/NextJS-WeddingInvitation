@@ -5,6 +5,11 @@ export const naverWeddingMapStrings = {
   venue: {
     name: "송파문정 더 컨벤션",
     address: "서울 송파구 송파대로 155",
+    phone: "02-6418-5000",
+    roadAddress: "서울 송파구 송파대로 155 NH송파농협",
+    floors: "11~13층",
+    lotAddress: "서울 송파구 문정동 651-8",
+    nearby: "8호선 문정역 3번 출구에서 214m",
     lat: 37.484140411747,
     lng: 127.1228704328,
   },
@@ -18,15 +23,18 @@ export const naverWeddingMapStrings = {
   labels: {
     section: "오시는 길",
     actions: "지도 앱 길안내",
+    navigationToggle: "길찾기 앱 선택",
+    navigationClose: "길찾기 앱 선택 닫기",
+    locationDetails: "상세 위치 및 연락처",
   },
   status: {
     loading: "지도를 불러오는 중입니다.",
     error: "지도 로드에 실패했습니다. 허용 도메인과 ncpKeyId 설정을 확인해주세요.",
   },
   buttons: {
-    naver: "네이버지도 내비게이션",
-    kakao: "카카오맵 길찾기",
-    tmap: "티맵으로 가기",
+    naver: "네이버지도",
+    kakao: "카카오맵",
+    tmap: "티맵",
   },
   alerts: {
     tmapMobileOnly:

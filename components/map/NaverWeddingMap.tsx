@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { naverWeddingMapStrings } from "@/content/strings";
 import styles from "./NaverWeddingMap.module.css";
 
@@ -140,6 +140,8 @@ function openTmapNavigation() {
 }
 
 export default function NaverWeddingMap() {
+  const [navigationOpen, setNavigationOpen] = useState(false);
+  const navigationId = useId();
   const mapElementRef = useRef<HTMLDivElement | null>(null);
   const initializedRef = useRef(false);
   const [mapStatus, setMapStatus] = useState<"loading" | "ready" | "error">(
@@ -230,6 +232,20 @@ export default function NaverWeddingMap() {
         <p className={styles.eyebrow}>{naverWeddingMapStrings.labels.section}</p>
         <h2 id="wedding-map-title">{venue.name}</h2>
         <p>{venue.address}</p>
+        <details className={styles.locationDetails}>
+          <summary>
+            {naverWeddingMapStrings.labels.locationDetails}
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true">
+              <path d="m5 8 5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </summary>
+          <dl className={styles.locationList}>
+            <div><dt>도로명</dt><dd>{venue.roadAddress}<br />{venue.floors}</dd></div>
+            <div><dt>지번</dt><dd>{venue.lotAddress}</dd></div>
+            <div><dt>가까운 역</dt><dd>{venue.nearby}</dd></div>
+            <div><dt>전화</dt><dd><a href={`tel:${venue.phone}`}>{venue.phone}</a></dd></div>
+          </dl>
+        </details>
       </div>
 
       <div className={styles.frame}>
@@ -243,19 +259,34 @@ export default function NaverWeddingMap() {
         )}
       </div>
 
-      <div
-        className={styles.actions}
-        aria-label={naverWeddingMapStrings.labels.actions}
-      >
-        <button type="button" onClick={openNaverNavigation}>
-          {naverWeddingMapStrings.buttons.naver}
+      <div className={styles.navigation}>
+        <button
+          type="button"
+          className={styles.navigationToggle}
+          aria-label={navigationOpen ? naverWeddingMapStrings.labels.navigationClose : naverWeddingMapStrings.labels.navigationToggle}
+          title={naverWeddingMapStrings.labels.navigationToggle}
+          aria-expanded={navigationOpen}
+          aria-controls={navigationId}
+          onClick={() => setNavigationOpen((open) => !open)}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Z" />
+            <path d="M9 3v15M15 6v15" />
+          </svg>
         </button>
-        <a href={getKakaoRouteUrl()} target="_blank" rel="noreferrer">
-          {naverWeddingMapStrings.buttons.kakao}
-        </a>
-        <button type="button" onClick={openTmapNavigation}>
-          {naverWeddingMapStrings.buttons.tmap}
-        </button>
+        <div id={navigationId} className={styles.navigationPanel} hidden={!navigationOpen}>
+          <div className={styles.actions} role="group" aria-label={naverWeddingMapStrings.labels.actions}>
+            <button type="button" onClick={openNaverNavigation} aria-label={naverWeddingMapStrings.buttons.naver} title={naverWeddingMapStrings.buttons.naver}>
+              {naverWeddingMapStrings.buttons.naver}
+            </button>
+            <a href={getKakaoRouteUrl()} target="_blank" rel="noreferrer" aria-label={naverWeddingMapStrings.buttons.kakao} title={naverWeddingMapStrings.buttons.kakao}>
+              {naverWeddingMapStrings.buttons.kakao}
+            </a>
+            <button type="button" onClick={openTmapNavigation} aria-label={naverWeddingMapStrings.buttons.tmap} title={naverWeddingMapStrings.buttons.tmap}>
+              {naverWeddingMapStrings.buttons.tmap}
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );
