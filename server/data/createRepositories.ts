@@ -1,3 +1,5 @@
+import type { FamilyAccountRepository } from "@/server/domain/repository/FamilyAccountRepository";
+import { FamilyAccountRepositoryImpl } from "./sheet/FamilyAccountRepositoryImpl";
 import { CommentRepository } from "@/server/domain/repository/CommentRepository";
 import { CommentRepositoryImpl } from "./sheet/CommentRepositoryImpl";
 import {
@@ -22,6 +24,7 @@ export function createRepositories() {
     oauthAuthorizationRepositories: createOAuthAuthorizationRepositories(),
     guestRepository,
     commentRepository,
+    familyAccountRepository: createFamilyAccountRepository(),
   };
 }
 
@@ -42,5 +45,15 @@ function createCommentRepository(): CommentRepository {
         throw error;
       },
     };
+  }
+}
+
+function createFamilyAccountRepository(): FamilyAccountRepository {
+  try {
+    return new FamilyAccountRepositoryImpl(
+      new GoogleSheetsClient(getGoogleSheetsConfig("admin")),
+    );
+  } catch (error) {
+    return { async list() { throw error; } };
   }
 }

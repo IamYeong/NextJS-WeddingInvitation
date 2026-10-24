@@ -164,9 +164,9 @@ export class GoogleSheetsClient {
   }
 }
 
-export function getGoogleSheetsConfig(): GoogleSheetsConfig {
+export function getGoogleSheetsConfig(sheetNameOverride?: string): GoogleSheetsConfig {
   const spreadsheetId = process.env.GOOGLE_SHEETS_ID;
-  const sheetName = process.env.GOOGLE_SHEETS_NAME;
+  const sheetName = sheetNameOverride ?? process.env.GOOGLE_SHEETS_NAME;
   const serviceAccountKey = getServiceAccountKey();
 
   if (
