@@ -1,3 +1,5 @@
+import type { FamilyAccountRepository } from "@/server/domain/repository/FamilyAccountRepository";
+import { FamilyAccountRepositoryImpl } from "./sheet/FamilyAccountRepositoryImpl";
 import { CommentRepository } from "@/server/domain/repository/CommentRepository";
 import { CommentRepositoryImpl } from "./sheet/CommentRepositoryImpl";
 import {
@@ -22,6 +24,7 @@ export function createRepositories() {
     oauthAuthorizationRepositories: createOAuthAuthorizationRepositories(),
     guestRepository,
     commentRepository,
+    familyAccountRepository: createFamilyAccountRepository(),
   };
 }
 
@@ -42,5 +45,19 @@ function createCommentRepository(): CommentRepository {
         throw error;
       },
     };
+  }
+}
+
+function createFamilyAccountRepository(): FamilyAccountRepository {
+  try {
+    const sheetName = process.env.GOOGLE_SHEETS_FAMILY_INFO;
+    if (!sheetName?.trim()) {
+      throw new Error("GOOGLE_SHEETS_FAMILY_INFO 설정이 필요합니다.");
+    }
+    return new FamilyAccountRepositoryImpl(
+      new GoogleSheetsClient(getGoogleSheetsConfig(sheetName)),
+    );
+  } catch (error) {
+    return { async list() { throw error; } };
   }
 }

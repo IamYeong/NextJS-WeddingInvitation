@@ -1,3 +1,4 @@
+import FamilyAccounts from "@/components/family-accounts/FamilyAccounts";
 import EnvelopeDemo from "@/components/envelope/EnvelopeDemo";
 import NotebookDemo from "@/components/notebook/NotebookDemo";
 import AnalogTVTest from "@/components/analog-tv/AnalogTVTest";
@@ -18,6 +19,12 @@ type ComponentTest = {
 };
 
 export const componentTests: ComponentTest[] = [
+  {
+    slug: "family-accounts",
+    name: "마음 전하실 곳",
+    description: "신랑·신부와 혼주의 계좌 정보를 펼쳐 보고 복사합니다.",
+    component: FamilyAccounts,
+  },
   {
     slug: "envelope",
     name: "열리는 청첩장 봉투",
