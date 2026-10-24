@@ -1,4 +1,5 @@
 import { createSign } from "node:crypto";
+import { normalizeServiceAccountPrivateKey, parseServiceAccountKey } from "./parseServiceAccountKey";
 
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 const GOOGLE_SHEETS_SCOPE = "https://www.googleapis.com/auth/spreadsheets";
@@ -152,7 +153,7 @@ export class GoogleSheetsClient {
   }
 
   private normalizePrivateKey(privateKey: string) {
-    return privateKey.replace(/\\n/g, "\n");
+    return normalizeServiceAccountPrivateKey(privateKey);
   }
 
   private toBase64Url(value: string | Buffer) {
@@ -196,5 +197,5 @@ function getServiceAccountKey(): GoogleServiceAccountKey {
     return {};
   }
 
-  return JSON.parse(keyJson) as GoogleServiceAccountKey;
+  return parseServiceAccountKey(keyJson);
 }
