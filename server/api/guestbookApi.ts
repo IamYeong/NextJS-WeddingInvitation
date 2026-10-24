@@ -1,10 +1,11 @@
-import { guestCommentsStrings } from "@/content/strings";
 import { CommentRepository } from "@/server/domain/repository/CommentRepository";
 import {
   GuestLoginRequest,
   GuestRepository,
 } from "@/server/domain/repository/GuestRepository";
 import { PaginationRequest } from "@/server/domain/repository/Pagination";
+
+const ANONYMOUS_COMMENT_CONTENT = "축하합니다~";
 
 export type GuestbookApiDependencies = {
   guestRepository: GuestRepository;
@@ -37,7 +38,7 @@ export function createGuestbookApi({
       }
 
       const content = author.isAnonymous
-        ? guestCommentsStrings.form.anonymousContent
+        ? ANONYMOUS_COMMENT_CONTENT
         : request.content?.trim();
 
       if (!content) {
