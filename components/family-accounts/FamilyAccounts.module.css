@@ -1,0 +1,32 @@
+.section {
+  background: #faf8f5;
+  color: #342b23;
+  font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  min-height: 100svh;
+  padding: 80px 24px 64px;
+}
+.content { width: 100%; max-width: 392px; margin: 0 auto; text-align: center; }
+.eyebrow { color: #97816a; font-family: Georgia, serif; font-size: 10px; letter-spacing: 3px; }
+.ornament { display: block; margin: 25px 0 21px; color: #b79b75; font-size: 25px; }
+.content h2 { margin: 0; font-family: "Batang", "Songti SC", serif; font-size: 26px; font-weight: 400; letter-spacing: 2px; }
+.intro { margin: 25px 0 40px; color: #82766b; font-size: 13px; line-height: 2.1; word-break: keep-all; }
+.accounts { border-top: 1px solid #d9cdbd; text-align: left; }
+.group { border-bottom: 1px solid #dfd6ca; }
+.group summary { display: flex; align-items: center; justify-content: space-between; min-height: 68px; padding: 16px 20px; cursor: pointer; list-style: none; font-size: 14px; letter-spacing: .6px; }
+.group summary::-webkit-details-marker { display: none; }
+.chevron { width: 8px; height: 8px; border-right: 1px solid #99846b; border-bottom: 1px solid #99846b; transform: rotate(45deg); transition: transform .2s; }
+.group[open] .chevron { transform: rotate(225deg); }
+.members { padding: 0 20px; background: #f3eee7; }
+.member { padding: 23px 0; }
+.member + .member { border-top: 1px solid #e3dacf; }
+.identity { display: flex; gap: 12px; align-items: baseline; }
+.identity span { min-width: 38px; color: #8d7d6b; font-size: 11px; }
+.identity strong { font-size: 15px; font-weight: 500; letter-spacing: 2px; }
+.account { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin-top: 10px; }
+.account p { margin: 0; min-width: 0; overflow-wrap: anywhere; user-select: text; color: #736555; font-size: 13px; line-height: 1.8; }
+.account button, .retry { flex-shrink: 0; min-width: 48px; min-height: 44px; padding: 8px 12px; border: 1px solid #d7c8b5; border-radius: 4px; background: #fffdf9; color: #73604a; font: inherit; font-size: 11px; cursor: pointer; }
+.group summary:focus-visible, .account button:focus-visible, .retry:focus-visible { outline: 2px solid #9b7850; outline-offset: 4px; }
+.message { padding: 26px 16px; color: #82766b; font-size: 13px; text-align: center; line-height: 1.8; }
+.notice { min-height: 42px; margin: 18px 0 0; color: #826d52; font-size: 12px; line-height: 1.8; }
+.footer { color: #a29484; font-size: 11px; letter-spacing: .4px; }
+@media (prefers-reduced-motion: reduce) { .chevron { transition: none; } }
