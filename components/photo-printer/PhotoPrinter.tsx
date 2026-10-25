@@ -12,10 +12,11 @@ export type PrinterPhoto = {
 type PhotoPrinterProps = {
   photos: readonly [PrinterPhoto, PrinterPhoto, PrinterPhoto, PrinterPhoto];
   caption?: string;
+  onPhotoClick?: (index: number) => void;
 };
 
 /** A fixed 2×2 frame. Change photos to print a new set; photos stay local to the caller. */
-export default function PhotoPrinter({ photos, caption }: PhotoPrinterProps) {
+export default function PhotoPrinter({ photos, caption, onPhotoClick }: PhotoPrinterProps) {
   const root = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [edition, setEdition] = useState(0);
@@ -59,8 +60,13 @@ export default function PhotoPrinter({ photos, caption }: PhotoPrinterProps) {
             <div className={styles.photos}>
               {photos.map((photo, index) => (
                 <div className={styles.photo} key={index} data-photo-index={index}>
-                  {/* eslint-disable-next-line @next/next/no-img-element -- Supports consumer URLs and local upload blob URLs. */}
-                  <img src={photo.src} alt={photo.alt} style={{ objectPosition: photo.objectPosition }} />
+                  {onPhotoClick ? <button className={styles.photoButton} type="button" disabled={printing} onClick={() => onPhotoClick(index)} aria-label={`${index + 1}번째 사진 크게 보기`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={photo.src} alt={photo.alt} style={{ objectPosition: photo.objectPosition }} />
+                  </button> : <>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={photo.src} alt={photo.alt} style={{ objectPosition: photo.objectPosition }} />
+                  </>}
                 </div>
               ))}
             </div>

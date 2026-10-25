@@ -25,3 +25,7 @@
 @media (prefers-reduced-motion: reduce) {
   .print { animation: none; transform: none; }
 }
+
+.photoButton { display: block; width: 100%; height: 100%; padding: 0; border: 0; background: transparent; cursor: zoom-in; }
+.photoButton:disabled { cursor: wait; }
+.photoButton:focus-visible { outline: 3px solid #597b5b; outline-offset: -4px; }
