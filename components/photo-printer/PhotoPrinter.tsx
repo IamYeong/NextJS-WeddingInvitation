@@ -10,7 +10,7 @@ export type PrinterPhoto = {
 };
 
 type PhotoPrinterProps = {
-  photos: readonly [PrinterPhoto, PrinterPhoto, PrinterPhoto, PrinterPhoto];
+  photos: readonly [PrinterPhoto | null, PrinterPhoto | null, PrinterPhoto | null, PrinterPhoto | null];
   caption?: string;
   onPhotoClick?: (index: number) => void;
 };
@@ -58,7 +58,9 @@ export default function PhotoPrinter({ photos, caption, onPhotoClick }: PhotoPri
             onAnimationEnd={() => setCompletedPrint(printKey)}
           >
             <div className={styles.photos}>
-              {photos.map((photo, index) => (
+              {photos.map((photo, index) => photo === null ? (
+                <div className={`${styles.photo} ${styles.emptyPhoto}`} key={index} aria-label="빈 사진 칸" />
+              ) : (
                 <div className={styles.photo} key={index} data-photo-index={index}>
                   {onPhotoClick ? <button className={styles.photoButton} type="button" disabled={printing} onClick={() => onPhotoClick(index)} aria-label={`${index + 1}번째 사진 크게 보기`}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -76,7 +78,7 @@ export default function PhotoPrinter({ photos, caption, onPhotoClick }: PhotoPri
         <div className={styles.lip} aria-hidden="true" />
       </div>
       <div className={styles.controls}>
-        <span role="status" aria-live="polite">{printing ? "사진을 인화하고 있어요" : "우리의 네 순간"}</span>
+        <span role="status" aria-live="polite">{printing ? "사진을 인화하고 있어요" : "우리의 소중한 순간"}</span>
         <button type="button" disabled={printing} onClick={() => {
           setEdition((value) => value + 1);
         }}>다시 인화하기 <span aria-hidden="true">↻</span></button>
