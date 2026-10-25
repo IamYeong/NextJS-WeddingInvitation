@@ -9,66 +9,93 @@
   width: 100%;
   aspect-ratio: 736 / 920;
   container-type: inline-size;
-  background: #eeede8 url('/images/notebook/notebook.png') center / 100% 100% no-repeat;
-  perspective: 1800px;
+  background: linear-gradient(90deg, #999b92, #e2e1d8 1%, #b9b9ae 99%, #8b8e86);
+  user-select: none;
+  cursor: grab;
   border-radius: 3px;
   box-shadow: 0 18px 45px #28251a24;
-  touch-action: auto;
+
 }
 
 .book:focus-visible { outline: 2px solid #887959; outline-offset: 6px; }
-.upper, .lower, .turning {
+/* Orthographic projection keeps each ring at the same x as its punched hole.
+   Perspective on the rings alone would shift their near arcs sideways. */
+.scene { position: absolute; inset: 0; z-index: 0; transform-style: preserve-3d; }
+.spine {
+  position: absolute;
+  inset: 1% 1.4%;
+  transform: translateZ(-.15cqw);
+  border-radius: .4cqw;
+  background: linear-gradient(#d1d0c5 46.7%, #c1c0b5 47.5%, #3e403b 49%, #292b26 51%, #c1c0b5 52.5%, #d1d0c5 53.3%);
+  box-shadow: 0 0 0 .25cqw #f6f4eb, 0 .3cqw .5cqw #28251a33;
+}
+.upper, .lower {
   position: absolute;
   left: 1.4%;
   width: 97.2%;
-  height: 42.5%;
+  height: 46.3%;
 }
-.upper { top: 1.8%; }
-.lower, .turning { top: 57.4%; }
-.content { position: absolute; inset: 5% 4%; overflow: hidden; }
+/* The punched row rests one ring radius above/below the spine. */
+.upper { top: calc(5.4594% - var(--ring-radius)); }
+.lower { top: calc(48.2406% + var(--ring-radius)); }
+.upper, .lower {
+  box-shadow: 0 .3cqw 0 #cfcec3, 0 .6cqw 0 #e2e0d6, 0 .9cqw .4cqw #302c2326;
+}
+.content { position: absolute; left: 4%; right: 4%; overflow: hidden; }
 .text, .image { position: absolute; margin: 0; }
 .text { white-space: pre-wrap; overflow-wrap: anywhere; }
 .image { display: block; height: auto; max-width: none; box-shadow: 0 3px 9px #24201420; }
-.turning {
-  z-index: 2;
-  /* Hinge at the centre of the metal rings, above the writable area. */
-  top: 50.6%;
-  height: 49.3%;
-  transform-origin: center top;
-  transform-style: preserve-3d;
-  pointer-events: none;
-}
 .front, .back {
+  --hole-y: var(--front-hole-y);
+  /* Three real openings. Ring and hole centres share the same x coordinates. */
+  mask-image:
+    radial-gradient(circle at var(--ring-1) var(--hole-y), transparent .95cqw, #000 1.02cqw),
+    radial-gradient(circle at var(--ring-2) var(--hole-y), transparent .95cqw, #000 1.02cqw),
+    radial-gradient(circle at var(--ring-3) var(--hole-y), transparent .95cqw, #000 1.02cqw);
+  mask-composite: intersect;
+  background:
+    radial-gradient(circle at var(--ring-1) var(--hole-y), #706d5c 1cqw, #d1cec0 1.12cqw, transparent 1.25cqw),
+    radial-gradient(circle at var(--ring-2) var(--hole-y), #706d5c 1cqw, #d1cec0 1.12cqw, transparent 1.25cqw),
+    radial-gradient(circle at var(--ring-3) var(--hole-y), #706d5c 1cqw, #d1cec0 1.12cqw, transparent 1.25cqw),
+    linear-gradient(90deg, #deddd3, #efeee8 .7%, #f4f2eb 50%, #efeee8 99.3%, #d4d2c7);
+  border-radius: .25cqw;
+}
+.front .content { top: 12%; bottom: 5%; }
+.back { --hole-y: var(--back-hole-y); }
+.back .content { top: 5%; bottom: 12%; }
+.binding { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
+.ring { position: absolute; top: 50%; width: 0; height: 0; transform-style: preserve-3d; }
+.ringSegment {
   position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  background-color: #efeee9;
-  background-image: url('/images/notebook/notebook.png');
-  background-size: 102.88% 202.84%;
-  background-position: center bottom;
-  border: 1px solid #cccac0;
-  box-shadow: 0 14px 25px #302c2338;
-}
-.front .content, .back .content { top: 18%; bottom: 4%; }
-.back { transform: rotateX(180deg); background-position: center top; }
-.back .content { top: 4%; bottom: 18%; }
-.forward { animation: flip-forward 900ms cubic-bezier(.38,.05,.26,1) both; }
-.backward { animation: flip-backward 900ms cubic-bezier(.38,.05,.26,1) both; }
-@keyframes flip-forward {
-  0% { transform: rotateX(0deg); }
-  45% { transform: rotateX(82deg) skewX(-1deg); }
-  100% { transform: rotateX(180deg); }
-}
-@keyframes flip-backward {
-  0% { transform: rotateX(180deg); }
-  55% { transform: rotateX(82deg) skewX(1deg); }
-  100% { transform: rotateX(0deg); }
+  top: -.19cqw;
+  width: .85cqw;
+  height: .39cqw;
+  backface-visibility: visible;
+  border-radius: .12cqw;
+  background: linear-gradient(90deg, #40483f, #a2aaa0 18%, #f4f6ed 43%, #c9d0c4 58%, #636e62 83%, #343e33);
+  filter: brightness(var(--metal-light));
 }
 .controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 20px; font-size: 14px; }
 .controls button { padding: 8px 16px; border: 1px solid #d4d1c8; border-radius: 24px; background: #faf9f5; cursor: pointer; }
 .controls button:disabled { opacity: .35; cursor: default; }
 .controls button:focus-visible { outline: 2px solid #887959; outline-offset: 3px; }
 .hint { margin: 12px 0 0; text-align: center; font-size: 12px; color: #7b786d; }
-@media (prefers-reduced-motion: reduce) {
-  .forward, .backward { animation-duration: 1ms; }
+.book:active { cursor: grabbing; }
+
+/* One shared 3D space: holes follow ring depth, while the free body can
+   pass in front of the rings. No global "paper above rings" stacking layer. */
+.foldSheet {
+  position: absolute;
+  top: calc(48.2406% + var(--ring-radius));
+  left: 1.4%;
+  width: 97.2%;
+  height: 46.3%;
+  transform-origin: 0 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
 }
+.foldFace, .foldFlapLayer, .foldPrint, .foldShade { position: absolute; inset: 0; }
+.foldFlapLayer { transform-origin: 0 0; transform-style: preserve-3d; }
+.foldShade { pointer-events: none; }
+.restingReverse { position: absolute; inset: 0; transform: scaleY(-1); opacity: .22; }
+.restingReverse .content { top: 12%; bottom: 5%; }
