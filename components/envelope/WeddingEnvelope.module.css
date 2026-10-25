@@ -1,22 +1,44 @@
 .component { width: min(100%, 510px); margin-inline: auto; text-align: center; }
-.scene { position: relative; width: 100%; aspect-ratio: 1140 / 1380; perspective: 1400px; }
+.scene { position: relative; width: 100%; aspect-ratio: 1140 / 1380; isolation: isolate; overflow: clip; }
 .envelope { position: absolute; inset: 0; isolation: isolate; }
 .back, .front { position: absolute; width: 100%; height: 100%; inset: 0; pointer-events: none; }
+/* The closed/moving lid covers the pocket; the fully opened lid sits behind the letter. */
 .back { z-index: 0; }
-.front { z-index: 4; }
-.flap { position: absolute; left: 0; top: 0; width: 100%; height: 43.4783%; transform-origin: center bottom; transform: rotateX(-180deg); transform-style: preserve-3d; transition: transform 850ms cubic-bezier(.3,.05,.2,1); z-index: 5; }
-.flap img { position: absolute; inset: 0; width: 100%; height: 100%; backface-visibility: hidden; }
-.flapOutside { position: absolute; inset: 0; transform: rotateX(180deg); backface-visibility: hidden; background: linear-gradient(120deg,#f1ebdf,#d9d3c5); mask: url('/images/envelope/flap.png') center / 100% 100% no-repeat; }
-.scene[data-open='true'] .flap { transform: rotateX(0deg); z-index: 1; }
-.card { position: absolute; z-index: 2; left: 14%; top: 48%; width: 72%; height: 45%; padding: 6% 4% 3%; box-sizing: border-box; color: #334a3c; background: #faf8f0; box-shadow: 0 1px 2px #263d3020, 0 8px 22px #263d3025; transform: translateY(0); transition: transform 700ms cubic-bezier(.22,.61,.36,1), visibility 0s 700ms; visibility: hidden; overflow: auto; scrollbar-width: thin; }
-.scene[data-open='true'] .card { visibility: visible; transform: translateY(-63%); transition-delay: 450ms,0s; }
+.front { z-index: 2; }
+.flapRig { position: absolute; inset: 0; z-index: 4; perspective: 1400px; pointer-events: none; }
+.flap { position: absolute; left: 0; top: 0; width: 100%; height: 42.753623%; transform-origin: center bottom; transform: rotateX(-180deg); transform-style: preserve-3d; transition: transform 850ms cubic-bezier(.3,.05,.2,1); }
+.flap img { position: absolute; inset: 0; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.flapInside { transform: rotateX(0deg); }
+.flapOutside { transform: rotateX(180deg); }
+.scene:is([data-phase='unsealing'], [data-phase='lifting'], [data-phase='expanded'], [data-phase='contracting'], [data-phase='returning']) .flap { transform: rotateX(0deg); }
+/* Change layers only once the lid is fully open, before the letter starts moving. */
+.scene:is([data-phase='lifting'], [data-phase='expanded'], [data-phase='contracting'], [data-phase='returning']) .flapRig { z-index: 0; }
+.back, .front, .flapRig, .inscription { translate: 0 0; transition: translate 850ms cubic-bezier(.22,.61,.36,1); }
+.scene[data-phase='expanded'] :is(.back, .front, .flapRig, .inscription) { translate: 0 130cqw; }
+.scene { container-type: inline-size; }
+.card { position: absolute; z-index: 1; left: 50%; top: 48%; width: 72%; height: 45%; padding: 6% 4% 3%; box-sizing: border-box; color: #334a3c; background: #faf8f0; box-shadow: 0 1px 2px #263d3020, 0 8px 22px #263d3025; transform: translate(-50%, 0); transition: transform 750ms cubic-bezier(.22,.61,.36,1), width 850ms ease, height 850ms ease, top 850ms ease, padding 850ms ease; visibility: hidden; overflow: auto; scrollbar-width: thin; }
+.scene:is([data-phase='unsealing'], [data-phase='lifting'], [data-phase='expanded'], [data-phase='contracting'], [data-phase='returning'], [data-phase='sealing']) .card { visibility: visible; }
+.scene:is([data-phase='lifting'], [data-phase='contracting']) .card { transform: translate(-50%, -105%); }
+.scene[data-phase='expanded'] .card { top: 0; width: 100%; height: 100%; transform: translate(-50%, 0); padding-top: 15%; }
+.toggle { position: relative; margin-top: 20px; }
+.toggle:disabled { cursor: wait; opacity: .65; }
 .card p { margin: 0 0 3%; font-size: clamp(10px, 2.8vw, 14px); line-height: 1.7; overflow-wrap: anywhere; white-space: pre-line; }
 .card .eyebrow { font: 9px Georgia, serif; letter-spacing: .15em; }
 .card h2 { margin: 7% 0 5%; font: 400 clamp(22px,6vw,34px)/1.4 Georgia, 'Batang', serif; overflow-wrap: anywhere; white-space: pre-line; }
 .rule { width: 24px; height: 1px; background: #899888; margin: 0 auto 5%; }
 .card .message { font-size: 11px; margin-top: 5%; }
-.inscription { position: absolute; z-index: 6; bottom: 12%; left: 15%; right: 15%; color: #6c7063; font: 9px Georgia,serif; letter-spacing: .15em; pointer-events: none; }
+.inscription { position: absolute; z-index: 3; bottom: 12%; left: 15%; right: 15%; color: #6c7063; font: 9px Georgia,serif; letter-spacing: .15em; pointer-events: none; }
 .toggle { border: 1px solid #9da993; padding: 13px 24px; background: transparent; color: #40583f; cursor: pointer; border-radius: 2px; font-size: 13px; letter-spacing: .04em; }
 .toggle:hover { background: #e8ebdf; }
 .toggle:focus-visible { outline: 3px solid #597b5b; outline-offset: 4px; }
-@media (prefers-reduced-motion: reduce) { .flap, .card, .scene[data-open='true'] .card { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .back, .front, .flapRig, .flap, .inscription, .card { transition: none; } }
+
+/* Full viewport entrance; the same paper grows into the invitation background. */
+.introduction { width: 100%; height: 100%; }
+.introduction .scene { height: 100%; aspect-ratio: auto; display: grid; place-items: center; }
+.introduction .envelope { position: relative; inset: auto; width: min(90%, 480px); aspect-ratio: 1140 / 1380; }
+.introduction .scene[data-phase='expanded'] .card { top: calc(50% - 50svh); width: 100vw; height: 100svh; padding-top: max(18svh, 70px); box-shadow: none; }
+.introduction .scene[data-phase='expanded'] :is(.back, .front, .flapRig, .inscription) { translate: 0 130svh; }
+.touchTarget { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: min(90%, 480px); aspect-ratio: 1140 / 1380; z-index: 10; border: 0; background: transparent; cursor: pointer; }
+.touchTarget:focus-visible { outline: 2px solid #597b5b; outline-offset: -8px; border-radius: 8px; }
+.touchTarget:disabled { cursor: default; }

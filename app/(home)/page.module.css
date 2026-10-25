@@ -1,6 +1,1 @@
-.page {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-  justify-content: space-between;
-}
+.page { min-height: 100svh; width: 100%; background: #faf8f0; overflow-x: clip; }
