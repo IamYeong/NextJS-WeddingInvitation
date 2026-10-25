@@ -9,7 +9,8 @@ import PhotoPrinter from "@/components/photo-printer/PhotoPrinter";
 import NaverWeddingMap from "@/components/map/NaverWeddingMap";
 import FamilyAccounts from "@/components/family-accounts/FamilyAccounts";
 import Guestbook from "@/components/guestbook/Guestbook";
-import { wedding, weddingPhotos } from "@/content/wedding";
+import { wedding, weddingMedia } from "@/content/wedding";
+import { formatCoupleNames, type CoupleNames } from "@/content/couple";
 import styles from "./WeddingHome.module.css";
 
 const chapters = [
@@ -22,7 +23,7 @@ const pages: NotebookPage[] = chapters.map((chapter, i) => ({
   elements: [
     { id: "chapter", type: "text", text: `CHAPTER 0${i + 1}`, x: 10, y: 7, width: 80, fontSize: 15, color: "#798471" },
     { id: "title", type: "text", text: chapter.title, x: 10, y: 17, width: 80, fontSize: 34, fontFamily: "'Batang', serif" },
-    { id: "photo", type: "image", ...weddingPhotos[i], x: 14, y: 35, width: 72, height: 36, rotation: i === 1 ? 3 : -3 },
+    { id: "photo", type: "image", ...weddingMedia.story[i], x: 14, y: 35, width: 72, height: 36, rotation: i === 1 ? 3 : -3 },
     { id: "body", type: "text", text: chapter.body, x: 10, y: 77, width: 80, fontSize: 19, textAlign: "center", lineHeight: 1.8 },
   ],
 }));
@@ -45,8 +46,8 @@ function WeddingCalendar() {
     <p className={styles.eyebrow}>SAVE THE DATE</p>
     <h2 id="date-heading">저희의 약속이 시작되는 날</h2>
     <time dateTime={wedding.dateTime} className={styles.date}>{wedding.date}</time>
-    <p className={styles.month}>2027. 05</p>
-    <table className={styles.calendar} aria-label="2027년 5월 예식 달력">
+    <p className={styles.month}>{wedding.year}. {String(wedding.month).padStart(2, "0")}</p>
+    <table className={styles.calendar} aria-label={`${wedding.year}년 ${wedding.month}월 예식 달력`}>
       <thead><tr>{["일", "월", "화", "수", "목", "금", "토"].map(day => <th key={day} scope="col">{day}</th>)}</tr></thead>
       <tbody>{Array.from({ length: Math.ceil((firstWeekday + dayCount) / 7) }, (_, week) => <tr key={week}>
         {Array.from({ length: 7 }, (_, day) => {
@@ -59,7 +60,8 @@ function WeddingCalendar() {
   </section>;
 }
 
-export default function WeddingHome() {
+export default function WeddingHome({ couple }: { couple: CoupleNames }) {
+  const galleryPhotos = weddingMedia.gallery.filter(photo => photo !== null);
   const [entered, setEntered] = useState(false);
   const [opening, setOpening] = useState(0);
   const entrance = useRef<HTMLDivElement>(null);
@@ -80,15 +82,15 @@ export default function WeddingHome() {
   return <>
     <div ref={entrance} className={styles.entrance} data-entered={entered} aria-hidden={entered} inert={entered}>
       <div className={styles.entranceCopy}><p className={styles.eyebrow}>A LETTER FOR YOU</p><p>소중한 당신께 전하는 편지</p></div>
-      <WeddingEnvelope key={opening} overview={wedding.overview} introduction onOpened={reveal} />
+      <WeddingEnvelope key={opening} overview={{ ...wedding.overview, names: formatCoupleNames(couple, "givenName") }} introduction onOpened={reveal} />
       <p className={styles.touchHint}>봉투를 터치해 열어주세요<span aria-hidden="true">↓</span></p>
     </div>
     <div hidden={!entered} className={styles.letter}>
       <section className={`${styles.section} ${styles.hero}`} aria-labelledby="wedding-heading">
         <p className={styles.eyebrow}>THE BEGINNING OF OUR FOREVER</p>
         <h1 id="wedding-heading" ref={heading} tabIndex={-1}>우리, 결혼합니다.</h1>
-        <IntroFilm src={weddingPhotos[0].src} alt={weddingPhotos[0].alt} caption="a little moment, a lifetime together" className={styles.film} />
-        <p className={styles.names}>{wedding.bride}<span>&</span>{wedding.groom}</p>
+        <IntroFilm src={weddingMedia.hero.src} alt={weddingMedia.hero.alt} caption="a little moment, a lifetime together" className={styles.film} />
+        <p className={styles.names}><span className={styles.person}><small>신랑</small>{couple.groom.fullName || "신랑"}</span><span>&</span><span className={styles.person}><small>신부</small>{couple.bride.fullName || "신부"}</span></p>
         <time dateTime={wedding.dateTime}>{wedding.date}</time>
         <p className={styles.venue}>{wedding.venue} · {wedding.floors}</p>
         <a className={styles.scrollHint} href="#wedding-details">아래로 천천히 읽어주세요<span aria-hidden="true">↓</span></a>
@@ -103,12 +105,14 @@ export default function WeddingHome() {
         <p className={styles.eyebrow}>OUR LITTLE CHANNEL</p>
         <h2 id="tv-heading">함께한 순간을 재생합니다</h2>
         <p className={styles.description}>오래 꺼내 보고 싶은 기억들,<br />우리만의 채널에 담았습니다.</p>
-        <AnalogTV media={{ type: "image", ...weddingPhotos[1] }} />
+        {entered && <AnalogTV media={weddingMedia.television} />}
       </section>
       <section className={styles.section} aria-labelledby="gallery-heading">
         <p className={styles.eyebrow}>MOMENTS TO KEEP</p><h2 id="gallery-heading">함께라서 더 좋았던 순간들</h2>
         <p className={styles.description}>사진에 담긴 우리의 작은 행복을 꺼내봅니다.<br />사진을 누르면 크게 보실 수 있어요.</p>
-        {entered && <PhotoPrinter photos={weddingPhotos} caption="OUR FOUR LITTLE MOMENTS" onPhotoClick={index => { setPhoto(index); dialog.current?.showModal(); }} />}
+        {entered && <PhotoPrinter photos={weddingMedia.gallery} caption="OUR LITTLE MOMENTS" onPhotoClick={index => { const selected = weddingMedia.gallery[index];
+          if (!selected) return;
+          setPhoto(galleryPhotos.findIndex(photo => photo.src === selected.src)); dialog.current?.showModal(); }} />}
       </section>
       <div className={styles.embedded}>{entered && <NaverWeddingMap />}</div>
       <aside className={styles.travelNote} aria-label="예식장 이용 안내"><p>귀한 걸음, 편히 오실 수 있도록</p><p>문정역 3번 출구에서 도보로 오실 수 있습니다.<br />주차와 식사에 관한 자세한 안내는 추후 전해드리겠습니다.</p></aside>
@@ -124,11 +128,11 @@ export default function WeddingHome() {
         }}>다시 열어보기</button>
       </div>
     </div>
-    <dialog ref={dialog} className={styles.lightbox} aria-label={`예시 사진 ${photo + 1} 크게 보기`} onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
+    <dialog ref={dialog} className={styles.lightbox} aria-label={`사진 ${photo + 1} 크게 보기`} onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
       <button className={styles.closePhoto} onClick={() => dialog.current?.close()} aria-label="사진 닫기">닫기 ×</button>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={weddingPhotos[photo].src} alt={weddingPhotos[photo].alt} />
-      <div className={styles.photoNavigation}><button onClick={() => setPhoto((photo + 3) % 4)} aria-label="이전 사진">←</button><span>{photo + 1} / 4</span><button onClick={() => setPhoto((photo + 1) % 4)} aria-label="다음 사진">→</button></div>
+      <img src={galleryPhotos[photo].src} alt={galleryPhotos[photo].alt} />
+      <div className={styles.photoNavigation}><button onClick={() => setPhoto((photo + galleryPhotos.length - 1) % galleryPhotos.length)} aria-label="이전 사진">←</button><span>{photo + 1} / {galleryPhotos.length}</span><button onClick={() => setPhoto((photo + 1) % galleryPhotos.length)} aria-label="다음 사진">→</button></div>
     </dialog>
   </>;
 }

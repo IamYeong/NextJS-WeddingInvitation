@@ -50,3 +50,6 @@
 .reopen { min-height: 44px; padding: 10px 16px; border: 0; background: transparent; color: #8b947e; font: inherit; font-size: 11px; letter-spacing: .08em; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
 .reopen:focus-visible { outline: 2px solid #63785e; outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { .entrance[data-entered='true'] { transition: none; } }
+
+.names .person { display: grid; gap: 10px; color: #405441; font: 24px 'Batang', serif; }
+.person small { color: #8b947e; font: 10px sans-serif; letter-spacing: .14em; }

@@ -14,7 +14,7 @@ export type WeddingOverview = {
 export const defaultWeddingOverview: WeddingOverview = {
   heading: "WE ARE GETTING MARRIED",
   names: "서연 & 도윤",
-  date: "2027년 5월 22일 토요일 오후 2시",
+  date: "2027년 1월 2일 토요일 오후 2시",
   venue: "그린가든 웨딩홀 · 2층 가든홀",
   message: "우리의 새로운 시작에 함께해 주세요.",
 };
